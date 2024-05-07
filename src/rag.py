@@ -38,5 +38,5 @@ def get_retriever_tool(llm):
     return Tool(
         name="retriever_tool",
         func=retriever_tool,
-        description="Tool to get access to personal data",
+        description="Tool to get access to personal data for example what is my name",
     )
