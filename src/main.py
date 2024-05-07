@@ -1,14 +1,15 @@
+# from langchain_openai import ChatOpenAI
+import datetime
 import os
+from typing import Union, Dict, Tuple
 
 from dotenv import load_dotenv
 from langchain.agents import AgentExecutor, create_tool_calling_agent
-from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-import datetime
-from typing import Union, Dict, Tuple
 from langchain_core.tools import BaseTool
 from langchain_groq import ChatGroq
+
+from rag import get_retriever_tool
 
 
 def get_current_time():
@@ -34,8 +35,8 @@ load_dotenv()
 # llm = ChatOpenAI(model="gpt-3.5-turbo-0125", api_key=os.getenv("OPENAI_API_KEY"))
 llm = ChatGroq(groq_api_key=os.getenv("GROQ_API_KEY"))
 
-
-tools = [CurrentTimeTool()]
+retriever_tool = get_retriever_tool(llm)
+tools = [CurrentTimeTool(), retriever_tool]
 
 prompt = ChatPromptTemplate.from_messages(
     [
@@ -52,4 +53,4 @@ prompt = ChatPromptTemplate.from_messages(
 agent = create_tool_calling_agent(llm, tools, prompt)
 
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-agent_executor.invoke({"input": "What time is it?"})
+agent_executor.invoke({"input": "What is my name?"})
