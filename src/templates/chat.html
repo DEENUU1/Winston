@@ -40,6 +40,7 @@
         </div>
 
         <div class="col py-3">
+                <div hx-ext="client-side-templates">
 
                 <form
                         hx-post="/conversation/search/"
@@ -47,14 +48,23 @@
                         hx-swap="innerHTML"
                         hx-trigger="input"
                         hx-delay="1000ms"
+                        mustache-array-template="searchResultTemplate"
                 >
 
                     <label for="query">Search</label>
                     <input type="text" id="query" name="query">
                 </form>
 
-                <div id="searchResults"></div>
+                    <div id="searchResults"></div>
+                    <template id="searchResultTemplate">
+                        {% raw %}
+                            {{#data}}
+                                <p> {{content}} </p>
+                            {{/data}}
+                        {% endraw %}
+                    </template>
 
+                </div>
 
             <div hx-ext="client-side-templates">
                 <div id="content"></div>
@@ -88,9 +98,7 @@
             var conversationName = button.getAttribute('data-conversation-name');
             console.log('Conversation Name:', conversationName);
             document.getElementById('conversation_name').value = conversationName;
-
             document.getElementById('conversationForm').setAttribute('hx-post', '/conversation/' + conversationName);
-
             htmx.process(document)
         }
 
