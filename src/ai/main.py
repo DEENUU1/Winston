@@ -2,14 +2,15 @@
 import datetime
 import os
 from typing import Union, Dict, Tuple
-from memory import setup_memory
+
 from dotenv import load_dotenv
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.tools import BaseTool
 from langchain_groq import ChatGroq
 
-from rag import get_retriever_tool
+from .memory import setup_memory
+from .rag import get_retriever_tool
 
 
 def get_current_time():
@@ -37,7 +38,6 @@ llm = ChatGroq(groq_api_key=os.getenv("GROQ_API_KEY"))
 
 retriever_tool = get_retriever_tool(llm)
 tools = [CurrentTimeTool(), retriever_tool]
-memory = setup_memory(str(get_current_time()))
 prompt = ChatPromptTemplate.from_messages(
     [
         (
@@ -52,7 +52,8 @@ prompt = ChatPromptTemplate.from_messages(
 
 agent = create_tool_calling_agent(llm, tools, prompt)
 
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, memory=memory)
-agent_executor.invoke({"input": "Tell me something about Warsaw"})
 
-agent_executor.invoke({"input": "Who is president of this city?"})
+def setup_agent(session_id):
+    memory = setup_memory(session_id=session_id)
+    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, memory=memory)
+    return agent_executor

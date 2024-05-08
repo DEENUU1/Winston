@@ -1,19 +1,32 @@
-from config.settings import settings
-from fastapi import Request, APIRouter
+from fastapi import Request, APIRouter, Form
 from fastapi.responses import HTMLResponse
-from services.message_history_service import MessageHistoryService
 
+from config.settings import settings
+from services.message_history_service import MessageHistoryService
+from ai.main import setup_agent
 
 router = APIRouter(
     prefix="",
     tags=["Chat"],
 )
 
+
 @router.get("/conversation/{session_id}")
 def get_conversation(session_id: str):
     message_history_service = MessageHistoryService(session_id)
     conversation = message_history_service.get_messages_by_session_id()
-    return [{"content": message.content, "type": message.type} for message in conversation]
+    return [{"content": message.content, "type": True if message.type == "human" else False} for message in conversation]
+
+
+@router.post("/conversation/{session_id}")
+def send_message(
+        session_id: str,
+        user_input: str = Form(...),
+):
+    agent = setup_agent(session_id)
+    agent.invoke({"input": user_input})
+    return {"status": "ok"}
+
 
 @router.get("/", response_class=HTMLResponse)
 def chat(request: Request):
