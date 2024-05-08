@@ -23,7 +23,6 @@ def get_conversation(session_id: str):
 def search_conversations(
         query: str = Form(...)
 ):
-    print(query)
     message_history_service = MessageHistoryService()
     conversations = message_history_service.search_conversations_by_content(query)
     return conversations

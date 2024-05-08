@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
-    <script src="{{ url_for('static', path='/copyText.js')}}"></script>
+<script src="{{ url_for('static', path='/copyText.js')}}"></script>
+<script src="{{ url_for('static', path='/storeConversationName.js')}}"></script>
 {% endblock %}
 
 
@@ -40,14 +41,13 @@
         </div>
 
         <div class="col py-3">
-                <div hx-ext="client-side-templates">
+            <div hx-ext="client-side-templates">
 
                 <form
                         hx-post="/conversation/search/"
                         hx-target="#searchResults"
                         hx-swap="innerHTML"
                         hx-trigger="input"
-                        hx-delay="1000ms"
                         mustache-array-template="searchResultTemplate"
                 >
 
@@ -55,30 +55,30 @@
                     <input type="text" id="query" name="query">
                 </form>
 
-                    <div id="searchResults"></div>
-                    <template id="searchResultTemplate">
-                        {% raw %}
-                            {{#data}}
-                                <p> {{content}} </p>
-                            {{/data}}
-                        {% endraw %}
-                    </template>
+                <div id="searchResults"></div>
+                <template id="searchResultTemplate">
+                    {% raw %}
+                        {{#data}}
+                            <p> {{content}} </p>
+                        {{/data}}
+                    {% endraw %}
+                </template>
 
-                </div>
+            </div>
 
             <div hx-ext="client-side-templates">
                 <div id="content"></div>
                 <template id="foo">
                     {% raw %}
-                        {{#data}}
-                            {{#type}}
-                                <p style="color: red"> {{content}} </p>
-                            {{/type}}
-                            {{^type}}
-                                <p style="color: blue">{{content}}</p>
-                                <button class="btn btn-primary copy-button" data-result="{{content}}">Copy</button>
-                            {{/type}}
-                        {{/data}}
+                    {{#data}}
+                    {{#type}}
+                    <p style="color: red"> {{content}} </p>
+                    {{/type}}
+                    {{^type}}
+                    <p style="color: blue">{{content}}</p>
+                    <button class="btn btn-primary copy-button" data-result="{{content}}">Copy</button>
+                    {{/type}}
+                    {{/data}}
                     {% endraw %}
                 </template>
             </div>
@@ -92,18 +92,7 @@
 
     </div>
 
-    <script>
-
-        function storeConversationName(button) {
-            var conversationName = button.getAttribute('data-conversation-name');
-            console.log('Conversation Name:', conversationName);
-            document.getElementById('conversation_name').value = conversationName;
-            document.getElementById('conversationForm').setAttribute('hx-post', '/conversation/' + conversationName);
-            htmx.process(document)
-        }
-
-    </script>
-
     {% endblock %}
+
 </div>
 
