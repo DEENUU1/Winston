@@ -1,3 +1,5 @@
+'use client'
+import {useEffect, useState} from "react";
 
 
 async function getConversationList(){
@@ -5,7 +7,6 @@ async function getConversationList(){
     {
       cache: 'no-cache'
     })
-
   return res.json()
 }
 
@@ -13,37 +14,69 @@ async function getConversationList(){
 async function getConversation(sessionId: string){
   const res = await fetch("http://localhost:8000/conversation/" + sessionId,
     {
-      cache: 'no-cache'
+      cache: 'no-store'
     })
-
   return res.json()
 }
 
-const Conversation = ({ messages }: {messages: any}) => {
-  return (
-    <div className="flex flex-col space-y-4">
-      {messages.map((message, index) => (
-        <div
-          key={index}
-          className={`${
-            message.type === 'human' ? 'self-end' : 'self-start'
-          } max-w-md mx-2`}
-        >
-          <div className={`text-black p-4 rounded-lg shadow ${message.type === 'human' ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'}`}>
-            {message.content}
+async function createConversation(){
+  const res = await fetch("http://localhost:8000/conversation/", {
+    method: 'POST'
+  })
+  return res.json()
+}
+
+
+
+const Conversation = ({ messages }: {messages: any[] | undefined}) => {
+  console.log(messages?.length);
+  if (!messages || messages.length == 0 || !Array.isArray(messages)) {
+    return <div className="text-center text-gray-500">No messages yet</div>;
+  } else {
+    return (
+      <div className="flex flex-col space-y-4">
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`${
+              message?.type === 'human' ? 'self-end' : 'self-start'
+            } max-w-md mx-2`}
+          >
+            <div className={`text-black p-4 rounded-lg shadow ${message?.type === 'human' ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'}`}>
+              {message?.content}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  }
 };
 
 
-export default async function Home() {
-  const conversations = await getConversationList();
 
-  const conversation = await getConversation(conversations?.session_id[0]);
-  console.log(conversation)
+export default function Home() {
+  const [sessionId, setSessionId] = useState()
+  const [conversations, setConversations] = useState([])
+  const [conversation, setConversation] = useState([])
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getConversationList();
+      setConversations(data);
+      setSessionId(data?.session_id[0])
+
+      const conversation = await getConversation(sessionId);
+      setConversation(conversation)
+    }
+    fetchData();
+
+  }, [sessionId]);
+
+  const handleCreateConversation = async () => {
+    const newConversation = await createConversation();
+    setSessionId(newConversation.session_id)
+    setConversation(sessionId)
+  }
 
   return (
     <>
@@ -62,9 +95,19 @@ export default async function Home() {
       <aside id="default-sidebar"
              className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
              aria-label="Sidebar">
+
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+          <ul className="space-y-2 font-medium mb-5">
+              <li>
+                <a href="#"
+                   className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <button onClick={handleCreateConversation} className="ms-3">New conversation</button>
+                </a>
+              </li>
+          </ul>
+
           <ul className="space-y-2 font-medium">
-            {conversations?.session_id.map(session_id => (
+            {conversations?.session_id?.map(session_id => (
               <li key={session_id}>
                 <a href="#"
                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

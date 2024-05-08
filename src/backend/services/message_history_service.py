@@ -1,6 +1,6 @@
 from ai.memory import CustomSQLChatMessageHistory, get_all_conversations
 from fastapi.exceptions import HTTPException
-
+from utils.random_string import get_random_string
 
 class MessageHistoryService:
     def __init__(self, session_id: str = "None"):
@@ -24,10 +24,9 @@ class MessageHistoryService:
         return self.custom_sql_chat_message_history.get_messages_by_session_id()
 
     def create_conversation(self):
-        if self.session_id == "None":
-            raise HTTPException(status_code=400, detail="Session id is required")
-
-        return self.custom_sql_chat_message_history.create_conversation()
+        random_string = get_random_string()
+        self.session_id = random_string
+        return self.custom_sql_chat_message_history.create_conversation(), random_string
 
     def delete_conversation(self):
         if self.session_id == "None":

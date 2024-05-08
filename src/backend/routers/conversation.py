@@ -11,6 +11,12 @@ router = APIRouter(
 )
 
 
+@router.post("/conversation/")
+def create_conversation():
+    message_history_service = MessageHistoryService()
+    _, random_string = message_history_service.create_conversation()
+    return JSONResponse(content={"session_id": random_string})
+
 @router.post("/conversation/search/")
 def search_conversations(
         query: str = Form(...)
