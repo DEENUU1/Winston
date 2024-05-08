@@ -15,19 +15,6 @@
                     <span class="fs-5 d-none d-sm-inline">Menu</span>
                 </a>
 
-                <form
-                        hx-post="/conversation/search/"
-                        hx-target="#searchResults"
-                        hx-swap="outerHTML"
-                >
-
-                    <label for="query">Search</label>
-                    <input type="text" id="query" name="query">
-                </form>
-
-                <div id="searchResults"></div>
-
-
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     {% for conversation in conversations %}
                     <li class="nav-item">
@@ -53,6 +40,22 @@
         </div>
 
         <div class="col py-3">
+
+                <form
+                        hx-post="/conversation/search/"
+                        hx-target="#searchResults"
+                        hx-swap="innerHTML"
+                        hx-trigger="input"
+                        hx-delay="1000ms"
+                >
+
+                    <label for="query">Search</label>
+                    <input type="text" id="query" name="query">
+                </form>
+
+                <div id="searchResults"></div>
+
+
             <div hx-ext="client-side-templates">
                 <div id="content"></div>
                 <template id="foo">
