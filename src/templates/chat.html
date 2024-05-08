@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block scripts %}
+    <script src="{{ url_for('static', path='/copyText.js')}}"></script>
+{% endblock %}
+
+
 {% block content %}
 
 <div class="container-fluid">
@@ -32,22 +37,24 @@
                 </ul>
             </div>
         </div>
+
         <div class="col py-3">
-        <div hx-ext="client-side-templates">
-            <div id="content"></div>
-            <template id="foo">
-                {% raw %}
-                    {{#data}}
-                        {{#type}}
-                            <p style="color: red"> {{content}} </p>
-                        {{/type}}
-                        {{^type}}
-                            <p style="color: blue">{{content}}</p>
-                        {{/type}}
-                    {{/data}}
-                {% endraw %}
-            </template>
-        </div>
+            <div hx-ext="client-side-templates">
+                <div id="content"></div>
+                <template id="foo">
+                    {% raw %}
+                        {{#data}}
+                            {{#type}}
+                                <p style="color: red"> {{content}} </p>
+                            {{/type}}
+                            {{^type}}
+                                <p style="color: blue">{{content}}</p>
+                                <button class="btn btn-primary copy-button" data-result="{{content}}">Copy</button>
+                            {{/type}}
+                        {{/data}}
+                    {% endraw %}
+                </template>
+            </div>
 
             <form id="conversationForm" hx-post="">
                 <input type="hidden" id="conversation_name" name="conversation_name">
@@ -55,9 +62,11 @@
                 <input type="text" id="user_input" name="user_input">
             </form>
         </div>
+
     </div>
 
     <script>
+
         function storeConversationName(button) {
             var conversationName = button.getAttribute('data-conversation-name');
             console.log('Conversation Name:', conversationName);
