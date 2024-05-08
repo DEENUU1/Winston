@@ -13,6 +13,9 @@ class MessageHistoryService:
     def get_all_conversations():
         return get_all_conversations()
 
+    def search_conversations_by_content(self, query: str):
+        return self.custom_sql_chat_message_history.search_conversations_by_content(query)
+
     def get_unique_session_ids(self):
         return self.custom_sql_chat_message_history.unique_session_ids()
 

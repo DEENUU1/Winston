@@ -50,6 +50,19 @@ class CustomSQLChatMessageHistory(SQLChatMessageHistory):
             custom_message_converter=custom_converter_instance,
         )
 
+    def search_conversations_by_content(self, query: str) -> List[str]:
+        with self.Session() as session:
+            result = (
+                session.query(self.sql_model_class)
+                .filter(self.sql_model_class.message.contains(f"{query}"))
+                .all()
+            )
+            output = []
+
+            for record in result:
+                output.append(self.converter.from_sql_model(record))
+            return output
+
     def unique_session_ids(self) -> List[str]:
         """
         Retrieve all unique session IDs from db
