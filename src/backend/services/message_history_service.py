@@ -1,4 +1,4 @@
-from backend.ai.memory import CustomSQLChatMessageHistory, get_all_conversations
+from ai.memory import CustomSQLChatMessageHistory, get_all_conversations
 from fastapi.exceptions import HTTPException
 
 

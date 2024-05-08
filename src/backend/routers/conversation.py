@@ -1,13 +1,12 @@
-from fastapi import Request, APIRouter, Form, Response
+from fastapi import APIRouter, Form, Response
 from fastapi.responses import HTMLResponse
 
-from backend.ai.main import setup_agent
-from backend.config.settings import settings
-from backend.services.message_history_service import MessageHistoryService
+from ai.main import setup_agent
+from services.message_history_service import MessageHistoryService
 
 router = APIRouter(
     prefix="",
-    tags=["Chat"],
+    tags=["Conversation"],
 )
 
 
@@ -32,22 +31,14 @@ def send_message(
     return {"status": "ok"}
 
 
-@router.get("/", response_class=HTMLResponse)
-def home(request: Request):
+@router.get("/conversation/", response_class=HTMLResponse)
+def conversation_list():
     message_history_service = MessageHistoryService()
-
     conversations = message_history_service.get_unique_session_ids()
-
-    return settings.TEMPLATES.TemplateResponse(
-        request=request,
-        name="home.html",
-        context={
-            "conversations": conversations,
-        }
-    )
+    return conversations
 
 
 @router.get("/conversation/{session_id}")
-def conversation(session_id: str):
+def conversation_details(session_id: str):
     message_history_service = MessageHistoryService(session_id)
     return message_history_service.get_messages_by_session_id()
