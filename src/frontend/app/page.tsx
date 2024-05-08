@@ -10,9 +10,40 @@ async function getConversationList(){
 }
 
 
+async function getConversation(sessionId: string){
+  const res = await fetch("http://localhost:8000/conversation/" + sessionId,
+    {
+      cache: 'no-cache'
+    })
+
+  return res.json()
+}
+
+const Conversation = ({ messages }: {messages: any}) => {
+  return (
+    <div className="flex flex-col space-y-4">
+      {messages.map((message, index) => (
+        <div
+          key={index}
+          className={`${
+            message.type === 'human' ? 'self-end' : 'self-start'
+          } max-w-md mx-2`}
+        >
+          <div className={`text-black p-4 rounded-lg shadow ${message.type === 'human' ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'}`}>
+            {message.content}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 
 export default async function Home() {
   const conversations = await getConversationList();
+
+  const conversation = await getConversation(conversations?.session_id[0]);
+  console.log(conversation)
 
   return (
     <>
@@ -46,12 +77,7 @@ export default async function Home() {
       </aside>
 
       <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-
-
-
-
-        </div>
+        <Conversation messages={conversation}/>
       </div>
 
     </>
