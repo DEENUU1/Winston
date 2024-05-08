@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 
 <div class="container-fluid">
@@ -12,24 +11,34 @@
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     {% for conversation in conversations %}
-                        <li class="nav-item">
-                            <a href="/" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">{{conversation}}</span>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">
+                          <div hx-ext="client-side-templates">
+
+                            <button
+                                    hx-get="https://jsonplaceholder.typicode.com/todos/1"
+                                    hx-swap="innerHTML"
+                                    hx-target="#chat"
+                                    mustache-template="foo"
+                            >
+                                {{conversation}}
+                            </button>
+                          </div>
+                    </span>
+                    </li>
                     {% endfor %}
-
-
-
                 </ul>
-
-
             </div>
         </div>
         <div class="col py-3">
-            Content area...
+            <div id="chat"></div>
+
+            <template id="foo">
+                <p>{{title}}</p>
+            </template>
         </div>
     </div>
 </div>
+
 
 {% endblock %}
