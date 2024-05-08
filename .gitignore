@@ -1,4 +1,4 @@
-src/ai/data.txt
+src/backend/ai/data.txt
 ../.idea/
 db/
 sqlite.db

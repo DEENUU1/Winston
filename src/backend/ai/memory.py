@@ -88,6 +88,7 @@ class CustomSQLChatMessageHistory(SQLChatMessageHistory):
                 )
                 .order_by(self.sql_model_class.id.asc())
             )
+
             messages = []
             for record in result:
                 messages.append(self.converter.from_sql_model(record))

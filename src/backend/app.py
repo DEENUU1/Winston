@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 
 from config.settings import settings
 from utils.init_db import create_tables
-from views.router import router
+from routers.router import router
 
 app = FastAPI(
     debug=bool(settings.DEBUG),
