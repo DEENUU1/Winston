@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Form, Response
 from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 
 from ai.main import setup_agent
 from services.message_history_service import MessageHistoryService
@@ -35,7 +36,9 @@ def send_message(
 def conversation_list():
     message_history_service = MessageHistoryService()
     conversations = message_history_service.get_unique_session_ids()
-    return conversations
+    return JSONResponse(
+        content={"session_id": conversations}
+    )
 
 
 @router.get("/conversation/{session_id}")
