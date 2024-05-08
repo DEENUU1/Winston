@@ -106,6 +106,26 @@ class CustomSQLChatMessageHistory(SQLChatMessageHistory):
             session.commit()
 
 
+def get_all_conversations() -> List[Optional[str]]:
+    """
+    Get all conversations from db
+    """
+    result = []
+    session_ids = CustomSQLChatMessageHistory(session_id="null").unique_session_ids()
+
+    for session_id in session_ids:
+        sql_message = CustomSQLChatMessageHistory(session_id=session_id)
+        messages = sql_message.messages
+
+        for message in messages:
+            if hasattr(message, 'content'):
+                content = message.content
+                source = "AI" if isinstance(message, AIMessage) else "HUMAN"
+                result.append(f"{source}: {content}")
+
+    return result
+
+
 def setup_memory(session_id: str) -> ConversationBufferMemory:
     chat_message_history = CustomSQLChatMessageHistory(session_id=session_id)
 
@@ -115,30 +135,3 @@ def setup_memory(session_id: str) -> ConversationBufferMemory:
         chat_memory=chat_message_history,
     )
     return memory
-
-
-# def get_all_conversations() -> List[Optional[str]]:
-#     """
-#     Get all conversations from db
-#     """
-#     result = []
-#     session_ids = CustomSQLChatMessageHistory(session_id="null").unique_session_ids()
-#
-#     for session_id in session_ids:
-#         sql_message = CustomSQLChatMessageHistory(session_id=session_id)
-#         messages = sql_message.messages
-#
-#         for message in messages:
-#             if hasattr(message, 'content'):
-#                 content = message.content
-#                 source = "AI" if isinstance(message, AIMessage) else "HUMAN"
-#                 result.append(f"{source}: {content}")
-#
-#     return result
-
-
-# conversations = get_all_conversations()
-#
-# for conversation in conversations:
-#     print(conversation)
-#     print()
