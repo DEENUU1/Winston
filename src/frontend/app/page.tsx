@@ -1,6 +1,6 @@
 'use client'
 import {useEffect, useState} from "react";
-
+import CopyButton from "@/components/CopyButton";
 
 async function getConversationList(){
   const res = await fetch("http://localhost:8000/conversation/",
@@ -44,6 +44,7 @@ const Conversation = ({ messages }: {messages: any[] | undefined}) => {
           >
             <div className={`text-black p-4 rounded-lg shadow ${message?.type === 'human' ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'}`}>
               {message?.content}
+              <CopyButton text={message?.content}/>
             </div>
           </div>
         ))}
