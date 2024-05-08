@@ -24,9 +24,7 @@ class MessageHistoryService:
         return self.custom_sql_chat_message_history.get_messages_by_session_id()
 
     def create_conversation(self):
-        random_string = get_random_string()
-        self.session_id = random_string
-        return self.custom_sql_chat_message_history.create_conversation(), random_string
+        return self.custom_sql_chat_message_history.create_conversation()
 
     def delete_conversation(self):
         if self.session_id == "None":

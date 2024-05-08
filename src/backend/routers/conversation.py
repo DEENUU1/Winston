@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 
 from ai.main import setup_agent
 from services.message_history_service import MessageHistoryService
+from utils.random_string import get_random_string
 
 router = APIRouter(
     prefix="",
@@ -11,10 +12,10 @@ router = APIRouter(
 )
 
 
-@router.post("/conversation/")
+@router.post("/conversation/new/")
 def create_conversation():
-    message_history_service = MessageHistoryService()
-    _, random_string = message_history_service.create_conversation()
+    random_string = get_random_string()
+    MessageHistoryService(random_string).create_conversation()
     return JSONResponse(content={"session_id": random_string})
 
 @router.post("/conversation/search/")

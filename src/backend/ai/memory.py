@@ -101,7 +101,7 @@ class CustomSQLChatMessageHistory(SQLChatMessageHistory):
 
         # Because message field is required the content is an empty string and type is system
         # Later in conversation user input is a 'human' type and AI response is 'ai' type
-        empty_message = BaseMessage(content="", type="system")
+        empty_message = BaseMessage(content="Hi, how can I help you?", type="ai")
         with self.Session() as session:
             empty_sql_model = self.converter.to_sql_model(empty_message, self.session_id)
             session.add(empty_sql_model)

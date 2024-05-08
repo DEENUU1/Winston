@@ -20,7 +20,7 @@ async function getConversation(sessionId: string){
 }
 
 async function createConversation(){
-  const res = await fetch("http://localhost:8000/conversation/", {
+  const res = await fetch("http://localhost:8000/conversation/new/", {
     method: 'POST'
   })
   return res.json()
@@ -63,19 +63,27 @@ export default function Home() {
     async function fetchData() {
       const data = await getConversationList();
       setConversations(data);
-      setSessionId(data?.session_id[0])
+      // setSessionId(data?.session_id[0])
 
-      const conversation = await getConversation(sessionId);
-      setConversation(conversation)
+      const conversationData = await getConversation(sessionId);
+      setConversation(conversationData)
     }
     fetchData();
 
   }, [sessionId]);
 
+  const displayConversation = async (sessionId: string) => {
+    const conversationData = await getConversation(sessionId);
+    setConversation(conversationData)
+  }
+
   const handleCreateConversation = async () => {
     const newConversation = await createConversation();
-    setSessionId(newConversation.session_id)
-    setConversation(sessionId)
+    const newSessionId = newConversation.session_id
+    setSessionId(newSessionId)
+
+    const conversationData = await getConversation(newSessionId);
+    setConversation(conversationData)
   }
 
   return (
@@ -109,13 +117,14 @@ export default function Home() {
           <ul className="space-y-2 font-medium">
             {conversations?.session_id?.map(session_id => (
               <li key={session_id}>
-                <a href="#"
+                <button onClick={() => displayConversation(session_id)}
                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                   <span className="ms-3">{session_id}</span>
-                </a>
+                </button>
               </li>
             ))}
           </ul>
+
         </div>
       </aside>
 
