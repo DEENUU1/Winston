@@ -8,7 +8,6 @@ interface PageParams {
 }
 
 
-
 const ConversationRender = ({messages}: { messages: any[] | undefined }) => {
 	if (!messages || messages.length == 0 || !Array.isArray(messages)) {
 		return <div className="text-center text-gray-500">No messages yet</div>;
@@ -35,50 +34,49 @@ const ConversationRender = ({messages}: { messages: any[] | undefined }) => {
 };
 
 
-
 export default function Conversation({params}: { params: PageParams }) {
 	const sessionId = params.slug;
 	const [conversation, setConversation] = useState([])
 	const [message, setMessage] = useState('')
 
-	    const fetchChatHistory = async () => {
-        try {
-            const response = await fetch("http://localhost:8000/conversation/" + sessionId);
-            const data = await response.json();
-            setConversation(data);
-        } catch (error) {
-            console.log("Error fetching chat history");
-        }
-    };
+	const fetchChatHistory = async () => {
+		try {
+			const response = await fetch("http://localhost:8000/conversation/" + sessionId);
+			const data = await response.json();
+			setConversation(data);
+		} catch (error) {
+			console.log("Error fetching chat history");
+		}
+	};
 
-	    const sendMessage = async (e: any) => {
-        e.preventDefault();
+	const sendMessage = async (e: any) => {
+		e.preventDefault();
 
-        try {
-            const response = await fetch("http://localhost:8000/conversation/" + sessionId, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'accept': 'application/json'
-                },
-                body: JSON.stringify({'message': message})
-            });
+		try {
+			const response = await fetch("http://localhost:8000/conversation/" + sessionId, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'accept': 'application/json'
+				},
+				body: JSON.stringify({'message': message})
+			});
 
-            if (response.ok) {
-                setMessage('');
-            } else {
-                console.log("Can't send message");
-            }
-        } catch (error) {
-            console.log("Error sending message. Please try again later.");
-        } finally {
-            await fetchChatHistory();
-        }
-    }
+			if (response.ok) {
+				setMessage('');
+			} else {
+				console.log("Can't send message");
+			}
+		} catch (error) {
+			console.log("Error sending message. Please try again later.");
+		} finally {
+			await fetchChatHistory();
+		}
+	}
 
-		 useEffect(() => {
-        fetchChatHistory();
-    }, []);
+	useEffect(() => {
+		fetchChatHistory();
+	}, []);
 
 	return (
 		<>

@@ -2,6 +2,8 @@
 
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
+
 
 function getConversations() {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -26,12 +28,12 @@ async function createConversation() {
 
 export default function SideBar(){
 	const conversations = getConversations();
-
+	const router = useRouter()
 
 	const handleCreateConversation = async () => {
 		const newConversation = await createConversation();
 		const newSessionId = newConversation.session_id;
-		window.location.href = `/conversation/${newSessionId}`;
+		router.push(`/${newSessionId}`)
 	}
 
 
