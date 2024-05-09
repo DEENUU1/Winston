@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # Title is the name of application
     TITLE: str = "Winston"
     # SQLITE connection string
-    SQLITE_CONNECTION_STRING: Optional[str] = "sqlite:///database.db"
+    SQLITE_CONNECTION_STRING: Optional[str] = "sqlite:///sqlite.db"
 
 
 settings = Settings()
