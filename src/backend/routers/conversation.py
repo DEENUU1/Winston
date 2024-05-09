@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.responses import JSONResponse
 
 from ai.main import setup_agent
+from schemas.message import MessageInput
 from services.message_history_service import MessageHistoryService
 from utils.random_string import get_random_string
 
@@ -18,28 +19,26 @@ def create_conversation():
     MessageHistoryService(random_string).create_conversation()
     return JSONResponse(content={"session_id": random_string})
 
-@router.post("/conversation/search/")
-def search_conversations(
-        query: str = Form(...)
-):
-    message_history_service = MessageHistoryService()
-    conversations = message_history_service.search_conversations_by_content(query)
-    return conversations
+# @router.post("/conversation/search/")
+# def search_conversations(
+#         query: str = Form(...)
+# ):
+#     message_history_service = MessageHistoryService()
+#     conversations = message_history_service.search_conversations_by_content(query)
+#     return conversations
 
 
 @router.post("/conversation/{session_id}")
 def send_message(
-        response: Response,
         session_id: str,
-        user_input: str = Form(...),
+        data: MessageInput
 ):
-    response.headers["HX-Refresh"] = "true"
     agent = setup_agent(session_id)
-    agent.invoke({"input": user_input})
+    agent.invoke({"input": data.message})
     return {"status": "ok"}
 
 
-@router.get("/conversation/", response_class=HTMLResponse)
+@router.get("/conversation/")
 def conversation_list():
     message_history_service = MessageHistoryService()
     conversations = message_history_service.get_unique_session_ids()
