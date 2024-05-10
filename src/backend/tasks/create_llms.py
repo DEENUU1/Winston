@@ -1,6 +1,6 @@
 from config.database import get_db
 from repositories.provider_repository import ProviderRepository
-from schemas.llm_schema import LLMInput
+from schemas.llm_schema import LLMInputSchema
 from repositories.llm_repository import LLMRepository
 
 
@@ -17,7 +17,7 @@ def create_llms() -> None:
 
     for llm in llms:
         if not llm_repository.llm_exists_by_name(llm):
-            created = llm_repository.create_llm(LLMInput(name=llm, provider_id=groq_provider.id))
+            created = llm_repository.create_llm(LLMInputSchema(name=llm, provider_id=groq_provider.id))
             print(f"Created llm: {created}")
 
     print("Creating llms done!")

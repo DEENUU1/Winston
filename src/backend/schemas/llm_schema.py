@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 
 
-class LLMInput(BaseModel):
+class LLMInputSchema(BaseModel):
     name: str
     provider_id: int
 
 
-class LLMOutput(BaseModel):
+class LLMOutputSchema(BaseModel):
     id: int
     name: str
     provider_id: int

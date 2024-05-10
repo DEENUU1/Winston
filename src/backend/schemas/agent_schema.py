@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
-from .llm_schema import LLMOutput
+from .llm_schema import LLMOutputSchema
 from .tool_schema import ToolOutput
 
 
@@ -22,7 +22,7 @@ class AgentOutputSchema(BaseModel):
     temperature: Optional[float] = 0.0
     avatar: Optional[str] = None
     prompt: Optional[str] = None
-    llm: LLMOutput
+    llm: LLMOutputSchema
     tools: List[ToolOutput] = []
 
     class Config:

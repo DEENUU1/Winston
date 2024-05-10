@@ -1,7 +1,7 @@
 from typing import List, Type
 
 from sqlalchemy.orm import Session
-from schemas.llm_schema import LLMInput, LLMOutput
+from schemas.llm_schema import LLMInputSchema, LLMOutputSchema
 from models.llm import LLM
 
 
@@ -12,15 +12,18 @@ class LLMRepository:
     def llm_exists_by_name(self, name: str) -> bool:
         return self.session.query(LLM).filter_by(name=name).first() is not None
 
-    def create_llm(self, data: LLMInput) -> LLMOutput:
+    def llm_exists_by_id(self, _id: int) -> bool:
+        return self.session.query(LLM).filter_by(id=_id).first() is not None
+
+    def create_llm(self, data: LLMInputSchema) -> LLMOutputSchema:
         provider = LLM(**data.model_dump(exclude_none=True))
         self.session.add(provider)
         self.session.commit()
         self.session.refresh(provider)
-        return LLMOutput.from_orm(provider)
+        return LLMOutputSchema.from_orm(provider)
 
-    def get_llm_details(self, _id: int) -> LLMOutput:
-        return LLMOutput.from_orm(self.session.query(LLM).filter_by(id=_id).first())
+    def get_llm_details(self, _id: int) -> LLMOutputSchema:
+        return LLMOutputSchema.from_orm(self.session.query(LLM).filter_by(id=_id).first())
 
     def get_llm_object_by_id(self, _id: int) -> Type[LLM]:
         return self.session.query(LLM).filter_by(id=_id).first()
@@ -28,5 +31,5 @@ class LLMRepository:
     def get_llm_object_by_name(self, name: str) -> Type[LLM]:
         return self.session.query(LLM).filter_by(name=name).first()
 
-    def get_llm(self) -> List[LLMOutput]:
-        return [LLMOutput.from_orm(provider) for provider in self.session.query(LLM).all()]
+    def get_llms(self) -> List[LLMOutputSchema]:
+        return [LLMOutputSchema.from_orm(provider) for provider in self.session.query(LLM).all()]
