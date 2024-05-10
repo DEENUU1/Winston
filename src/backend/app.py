@@ -3,7 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from config.settings import settings
 from routers.router import router
-from tasks import create_providers, create_llms, create_tools, create_agents, create_settings
+# from tasks import create_providers, create_llms, create_tools, create_agents, create_settings
 from utils.init_db import create_tables
 
 app = FastAPI(
@@ -20,11 +20,11 @@ def on_startup() -> None:
     Initializes the database tables when the application starts up.
     """
     create_tables()
-    create_providers.create_providers()
-    create_llms.create_llms()
-    create_tools.create_tools()
-    create_agents.create_agents()
-    create_settings.create_settings()
+    # create_providers.create_providers()
+    # create_llms.create_llms()
+    # create_tools.create_tools()
+    # create_agents.create_agents()
+    # create_settings.create_settings()
 
 
 app.include_router(router)

@@ -1,6 +1,8 @@
 from typing import List, Type
 
 from sqlalchemy.orm import Session
+
+from models.tool import Tool
 from schemas.agent_schema import AgentOutputSchema, AgentInputSchema, AgentUpdateSchema
 from models.agent import Agent
 
@@ -31,7 +33,7 @@ class AgentRepository:
     def get_agent_object_by_name(self, name: str) -> Type[Agent]:
         return self.session.query(Agent).filter_by(name=name).first()
 
-    def get_agent(self) -> List[AgentOutputSchema]:
+    def get_agents(self) -> List[AgentOutputSchema]:
         return [AgentOutputSchema.from_orm(provider) for provider in self.session.query(Agent).all()]
 
     def update_agent(self, agent: Type[Agent], data: AgentUpdateSchema) -> AgentOutputSchema:
@@ -40,6 +42,16 @@ class AgentRepository:
         self.session.commit()
         self.session.refresh(agent)
         return AgentOutputSchema.from_orm(agent)
+
+    def add_tool_to_agent(self, agent: Type[Agent], tool: Type[Tool]) -> None:
+        agent.tools.append(tool)
+        self.session.commit()
+        return
+
+    def remove_tool_from_agent(self, agent: Type[Agent], tool: Type[Tool]) -> None:
+        agent.tools.remove(tool)
+        self.session.commit()
+        return
 
     def delete_agent(self, agent: Type[Agent]) -> None:
         self.session.delete(agent)
