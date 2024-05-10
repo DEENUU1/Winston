@@ -15,23 +15,23 @@ class AgentRepository:
     def agent_exists_by_id(self, _id: int) -> bool:
         return self.session.query(Agent).filter_by(id=_id).first() is not None
 
-    def create_tool(self, data: AgentInputSchema) -> AgentOutputSchema:
+    def create_agent(self, data: AgentInputSchema) -> AgentOutputSchema:
         provider = Agent(**data.model_dump(exclude_none=True))
         self.session.add(provider)
         self.session.commit()
         self.session.refresh(provider)
         return AgentOutputSchema.from_orm(provider)
 
-    def get_tool_details_by_id(self, _id: int) -> AgentOutputSchema:
+    def get_agent_details_by_id(self, _id: int) -> AgentOutputSchema:
         return AgentOutputSchema.from_orm(self.session.query(Agent).filter_by(id=_id).first())
 
-    def get_tool_object_by_id(self, _id: int) -> Type[Agent]:
+    def get_agent_object_by_id(self, _id: int) -> Type[Agent]:
         return self.session.query(Agent).filter_by(id=_id).first()
 
-    def get_tool_object_by_name(self, name: str) -> Type[Agent]:
+    def get_agent_object_by_name(self, name: str) -> Type[Agent]:
         return self.session.query(Agent).filter_by(name=name).first()
 
-    def get_tools(self) -> List[AgentOutputSchema]:
+    def get_agent(self) -> List[AgentOutputSchema]:
         return [AgentOutputSchema.from_orm(provider) for provider in self.session.query(Agent).all()]
 
     def update_agent(self, agent: Type[Agent], data: AgentUpdateSchema) -> AgentOutputSchema:

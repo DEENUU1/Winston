@@ -1,5 +1,7 @@
-from pydantic import BaseModel
 from typing import Optional, List
+
+from pydantic import BaseModel
+
 from .llm_schema import LLMOutput
 from .tool_schema import ToolOutput
 
@@ -23,6 +25,10 @@ class AgentOutputSchema(BaseModel):
     llm: LLMOutput
     tools: List[ToolOutput] = []
 
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
 
 class AgentUpdateSchema(BaseModel):
     name: str = None
@@ -31,4 +37,3 @@ class AgentUpdateSchema(BaseModel):
     avatar: Optional[str] = None
     prompt: Optional[str] = None
     llm_id: int
-
