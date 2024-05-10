@@ -9,11 +9,11 @@ class Agent(Base):
     __tablename__ = "agents"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    name = Column(String, unique=True, index=True)
-    description = Column(String)
-    temperature = Column(Float)
-    avatar = Column(String)
-    prompt = Column(String)
+    name = Column(String, unique=True, index=True, nullable=False)
+    description = Column(String, nullable=False)
+    temperature = Column(Float, default=0.0, nullable=False)
+    avatar = Column(String, nullable=True)
+    prompt = Column(String, nullable=True)
     llm_id = Column(Integer, ForeignKey('llms.id'))
 
     tools = relationship("Tool", secondary=agent_tool_association, back_populates="agents")
