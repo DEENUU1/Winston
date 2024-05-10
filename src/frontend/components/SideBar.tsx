@@ -57,6 +57,12 @@ export default function SideBar(){
 				<div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
 					<ul className="space-y-2 font-medium mb-5">
 						<li>
+							<Link href="/settings/"
+								 className="ms-3 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+								Settings
+							</Link>
+						</li>
+						<li>
 							<a href="#"
 								 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
 								<button onClick={handleCreateConversation} className="ms-3">New conversation</button>
@@ -68,7 +74,7 @@ export default function SideBar(){
 						{conversations?.session_id?.map(session_id => (
 							<li key={session_id}>
 								<Link href={`${session_id}`}
-												className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+											className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
 									<span className="ms-3">{session_id}</span>
 								</Link>
 							</li>
