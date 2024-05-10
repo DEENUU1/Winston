@@ -12,3 +12,7 @@ class SettingsOutputSchema(BaseModel):
     class Config:
         orm_mode = True
         from_attributes = True
+
+
+class SettingsUpdateSchema(BaseModel):
+    agent_id: int
