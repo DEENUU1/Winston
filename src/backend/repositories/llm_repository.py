@@ -20,10 +20,13 @@ class LLMRepository:
         return LLMOutput.from_orm(provider)
 
     def get_llm_details(self, _id: int) -> LLMOutput:
-        return LLMOutput.from_orm(self.session.query(LLM).filter(id=_id).first())
+        return LLMOutput.from_orm(self.session.query(LLM).filter_by(id=_id).first())
 
-    def get_llm_object(self, _id: int) -> Type[LLM]:
-        return self.session.query(LLM).filter(id=_id).first()
+    def get_llm_object_by_id(self, _id: int) -> Type[LLM]:
+        return self.session.query(LLM).filter_by(id=_id).first()
+
+    def get_llm_object_by_name(self, name: str) -> Type[LLM]:
+        return self.session.query(LLM).filter_by(name=name).first()
 
     def get_llm(self) -> List[LLMOutput]:
         return [LLMOutput.from_orm(provider) for provider in self.session.query(LLM).all()]

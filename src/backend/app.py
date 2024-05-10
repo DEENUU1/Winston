@@ -2,10 +2,9 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from config.settings import settings
-from utils.init_db import create_tables
 from routers.router import router
-from tasks import create_providers
-
+from tasks import create_providers, create_llms
+from utils.init_db import create_tables
 
 app = FastAPI(
     debug=bool(settings.DEBUG),
@@ -22,10 +21,10 @@ def on_startup() -> None:
     """
     create_tables()
     create_providers.create_providers()
+    create_llms.create_llms()
 
 
 app.include_router(router)
-
 
 origins = ["http://localhost:3000"]
 app.add_middleware(
