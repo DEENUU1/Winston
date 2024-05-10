@@ -45,7 +45,7 @@ class AgentService:
         return None
 
     def add_tool_to_agent(self, agent_id: int, tool_id: int) -> None:
-        if not self.agent_repository.add_tool_to_agent(agent_id):
+        if not self.agent_repository.agent_exists_by_id(agent_id):
             raise HTTPException(status_code=404, detail="Agent not found")
 
         if not self.tool_repository.tool_exists_by_id(tool_id):

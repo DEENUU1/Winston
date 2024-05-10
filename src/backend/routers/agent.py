@@ -38,10 +38,10 @@ def delete_agent(id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{id}/tool")
-def add_tool_to_agent(data: AgentUpdateToolsSchema, db: Session = Depends(get_db)):
+def add_tool_to_agent(id: int, data: AgentUpdateToolsSchema, db: Session = Depends(get_db)):
     if data.operation_type == "add":
-        return AgentService(db).add_tool_to_agent(data)
+        return AgentService(db).add_tool_to_agent(id, data.tool_id)
     elif data.operation_type == "remove":
-        return AgentService(db).remove_tool_from_agent(data)
+        return AgentService(db).remove_tool_from_agent(id, data.tool_id)
     else:
         return {"message": "Invalid operation type"}
