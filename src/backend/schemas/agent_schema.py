@@ -37,3 +37,8 @@ class AgentUpdateSchema(BaseModel):
     avatar: Optional[str] = None
     prompt: Optional[str] = None
     llm_id: int
+
+
+class AgentUpdateToolsSchema(BaseModel):
+    operation_type: str
+    tool_id: int
