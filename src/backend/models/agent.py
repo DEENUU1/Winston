@@ -16,4 +16,4 @@ class Agent(Base):
     prompt = Column(String)
 
     tools = relationship("Tool", secondary=agent_tool_association, back_populates="agents")
-    llm = relationship("LLM", uselist=False, back_populates="agent")
+    llms = relationship("LLM", uselist=False, back_populates="agent")

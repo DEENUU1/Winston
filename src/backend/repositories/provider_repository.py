@@ -10,10 +10,10 @@ class ProviderRepository:
         self.session = session
 
     def provider_exists_by_name(self, name: str) -> bool:
-        return self.session.query(Provider).filter(name=name).first() is not None
+        return self.session.query(Provider).filter_by(name=name).first() is not None
 
     def create_provider(self, data: ProviderInput) -> ProviderOutput:
-        provider = Provider(**data.dict())
+        provider = Provider(**data.model_dump(exclude_none=True))
         self.session.add(provider)
         self.session.commit()
         self.session.refresh(provider)

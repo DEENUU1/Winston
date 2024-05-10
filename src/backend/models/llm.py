@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from config.database import Base
+from models.relationships import tool_llm_association
 
 
 class LLM(Base):
@@ -13,4 +14,5 @@ class LLM(Base):
 
     provider = relationship("Provider", back_populates="llms")
     agent_id = Column(Integer, ForeignKey('agents.id'))
-    agent = relationship("Agent", back_populates="llm")
+    agent = relationship("Agent", back_populates="llms")
+    tools = relationship("Tool", secondary=tool_llm_association, back_populates="llms")
