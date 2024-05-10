@@ -43,6 +43,12 @@ class AgentRepository:
         self.session.refresh(agent)
         return AgentOutputSchema.from_orm(agent)
 
+    def update_avatar(self, agent: Type[Agent], image_url: str) -> AgentOutputSchema:
+        agent.avatar = image_url
+        self.session.commit()
+        self.session.refresh(agent)
+        return AgentOutputSchema.from_orm(agent)
+
     def add_tool_to_agent(self, agent: Type[Agent], tool: Type[Tool]) -> None:
         agent.tools.append(tool)
         self.session.commit()

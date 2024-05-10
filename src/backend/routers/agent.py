@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+from typing import Optional
+
+from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.orm import Session
 
 from config.database import get_db
@@ -16,6 +18,10 @@ def create_agent(data: AgentInputSchema, db: Session = Depends(get_db)):
     agent = AgentService(db).create_agent(data)
     return agent
 
+
+@router.put("/{id}/avatar")
+def update_agent_avatar(id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    return AgentService(db).update_agent_avatar(id, file)
 
 @router.get("/")
 def get_agents(db: Session = Depends(get_db)):

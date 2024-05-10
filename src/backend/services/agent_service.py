@@ -1,3 +1,6 @@
+import shutil
+
+from fastapi import UploadFile
 from sqlalchemy.orm import Session
 from typing import List
 from schemas.agent_schema import AgentOutputSchema, AgentInputSchema, AgentUpdateSchema
@@ -16,6 +19,19 @@ class AgentService:
             raise HTTPException(status_code=400, detail="Agent already exists")
 
         return self.agent_repository.create_agent(data)
+
+    def update_agent_avatar(self, _id: int, file: UploadFile) -> AgentOutputSchema:
+        if not self.agent_repository.agent_exists_by_id(_id):
+            raise HTTPException(status_code=404, detail="Agent not found")
+
+        agent = self.agent_repository.get_agent_object_by_id(_id)
+
+        avatar_path = f"media/avatar/{file.filename}"
+
+        with open(avatar_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        return self.agent_repository.update_avatar(agent, avatar_path)
 
     def get_agents(self) -> List[AgentOutputSchema]:
         return self.agent_repository.get_agents()

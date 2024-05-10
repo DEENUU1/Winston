@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
 
 from config.settings import settings
 from routers.router import router
@@ -10,7 +11,7 @@ app = FastAPI(
     debug=bool(settings.DEBUG),
     title=settings.TITLE,
 )
-
+app.mount("/media", StaticFiles(directory="media"), name="media")
 app.include_router(router)
 
 
