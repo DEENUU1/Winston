@@ -2,11 +2,11 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class ProviderInput(BaseModel):
+class ProviderInputSchema(BaseModel):
     name: str
 
 
-class ProviderOutput(BaseModel):
+class ProviderOutputSchema(BaseModel):
     id: int
     name: str
     api_key: Optional[str] = None
@@ -16,6 +16,6 @@ class ProviderOutput(BaseModel):
         from_attributes = True
 
 
-class ProviderUpdateApiKey(BaseModel):
+class ProviderUpdateApiKeySchema(BaseModel):
     api_key: Optional[str] = None
 
