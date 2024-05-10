@@ -18,3 +18,4 @@ class Agent(Base):
 
     tools = relationship("Tool", secondary=agent_tool_association, back_populates="agents")
     llm = relationship("LLM", back_populates="agent")
+    settings = relationship("Settings", uselist=False, back_populates="agent")
