@@ -24,3 +24,11 @@ class AgentOutputSchema(BaseModel):
     tools: List[ToolOutput] = []
 
 
+class AgentUpdateSchema(BaseModel):
+    name: str = None
+    description: str = None
+    temperature: Optional[float] = 0.0
+    avatar: Optional[str] = None
+    prompt: Optional[str] = None
+    llm_id: int
+
