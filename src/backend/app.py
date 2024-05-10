@@ -3,7 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from config.settings import settings
 from routers.router import router
-from tasks import create_providers, create_llms
+from tasks import create_providers, create_llms, create_tools
 from utils.init_db import create_tables
 
 app = FastAPI(
@@ -22,6 +22,7 @@ def on_startup() -> None:
     create_tables()
     create_providers.create_providers()
     create_llms.create_llms()
+    create_tools.create_tools()
 
 
 app.include_router(router)
