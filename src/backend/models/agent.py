@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 from config.database import Base
@@ -14,6 +14,7 @@ class Agent(Base):
     temperature = Column(Float)
     avatar = Column(String)
     prompt = Column(String)
+    llm_id = Column(Integer, ForeignKey('llms.id'))
 
     tools = relationship("Tool", secondary=agent_tool_association, back_populates="agents")
-    llms = relationship("LLM", uselist=False, back_populates="agent")
+    llm = relationship("LLM", back_populates="agent")

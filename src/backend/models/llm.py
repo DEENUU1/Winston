@@ -13,6 +13,5 @@ class LLM(Base):
     provider_id = Column(Integer, ForeignKey('providers.id'))
 
     provider = relationship("Provider", back_populates="llms")
-    agent_id = Column(Integer, ForeignKey('agents.id'))
-    agent = relationship("Agent", back_populates="llms")
+    agent = relationship("Agent", back_populates="llm")
     tools = relationship("Tool", secondary=tool_llm_association, back_populates="llms")
