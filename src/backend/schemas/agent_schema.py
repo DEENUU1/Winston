@@ -3,7 +3,7 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 from .llm_schema import LLMOutputSchema
-from .tool_schema import ToolOutput
+from .tool_schema import ToolOutputSchema
 
 
 class AgentInputSchema(BaseModel):
@@ -23,7 +23,7 @@ class AgentOutputSchema(BaseModel):
     avatar: Optional[str] = None
     prompt: Optional[str] = None
     llm: LLMOutputSchema
-    tools: List[ToolOutput] = []
+    tools: List[ToolOutputSchema] = []
 
     class Config:
         orm_mode = True

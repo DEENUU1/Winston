@@ -1,6 +1,6 @@
 from config.database import get_db
 from repositories.tool_repository import ToolRepository
-from schemas.tool_schema import ToolInput
+from schemas.tool_schema import ToolInputSchema
 
 
 def create_tools() -> None:
@@ -17,7 +17,7 @@ def create_tools() -> None:
 
     for tool in tools:
         if not tool_repository.tool_exists_by_name(tool.get("name")):
-            created = tool_repository.create_tool(ToolInput(name=tool.get("name"), description=tool.get("description")))
+            created = tool_repository.create_tool(ToolInputSchema(name=tool.get("name"), description=tool.get("description")))
             print(f"Created tool: {created}")
 
     print("Creating tools done!")

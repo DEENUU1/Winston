@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 
 
-class ToolInput(BaseModel):
+class ToolInputSchema(BaseModel):
     name: str
     description: str
 
 
-class ToolOutput(BaseModel):
+class ToolOutputSchema(BaseModel):
     id: int
     name: str
     description: str
