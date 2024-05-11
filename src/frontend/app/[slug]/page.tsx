@@ -111,7 +111,5 @@ export default function Conversation({params}: { params: PageParams }) {
 				</form>
 			</div>
 		</>
-
-
 	);
 }

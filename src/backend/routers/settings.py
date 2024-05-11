@@ -11,11 +11,11 @@ router = APIRouter(
 )
 
 
-@router.put("/{id}")
+@router.put("/{_id}")
 def update_settings(_id: int, data: SettingsUpdateSchema, db: Session = Depends(get_db)):
     return SettingsService(db).update_settings(_id, data)
 
 
-@router.get("/{id}")
+@router.get("/{_id}")
 def get_settings_details(_id: int, db: Session = Depends(get_db)):
     return SettingsService(db).get_settings_detail_by_id(_id)
