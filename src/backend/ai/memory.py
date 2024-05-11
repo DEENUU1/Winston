@@ -6,6 +6,7 @@ from langchain_community.chat_message_histories.sql import DefaultMessageConvert
 from langchain_core.messages import BaseMessage, AIMessage
 from sqlalchemy import Column, Integer, Text, DateTime, func
 from sqlalchemy.orm import declarative_base
+from config.settings import settings
 
 
 def custom_create_message_model(table_name: str, DynamicBase: Any) -> Any:
@@ -37,9 +38,7 @@ class CustomSQLChatMessageHistory(SQLChatMessageHistory):
             session_id_field_name: str = "session_id",
             custom_message_converter: Optional[BaseMessageConverter] = None,
     ):
-        # Hard code the connection_string
-        connection_string = "sqlite:///sqlite.db"
-
+        connection_string = settings.SQLITE_CONNECTION_STRING
         custom_converter_instance = custom_message_converter or CustomDefaultMessageConverter(table_name)
 
         super().__init__(

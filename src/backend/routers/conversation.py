@@ -2,7 +2,7 @@ from fastapi import APIRouter, Form, Response
 from fastapi.responses import HTMLResponse
 from fastapi.responses import JSONResponse
 
-from ai.main import setup_agent
+from ai.agent import setup_agent
 from schemas.message import MessageInput
 from services.message_history_service import MessageHistoryService
 from utils.random_string import get_random_string
