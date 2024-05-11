@@ -2,11 +2,23 @@
 
 import CopyButton from "@/components/CopyButton";
 import {useEffect, useState} from "react";
-import {Input, Button} from "@nextui-org/react";
-
+import {Button, Input} from "@nextui-org/react";
+import Markdown from "react-markdown";
+import gfm from 'remark-gfm';
 
 interface PageParams {
 	slug: string;
+}
+
+
+export function MarkdownMessage({message}: { message: string }) {
+	return (
+		<>
+			<div className="whitespace-pre-wrap">
+				<Markdown remarkPlugins={[gfm]}>{message}</Markdown>
+			</div>
+		</>
+	)
 }
 
 
@@ -25,7 +37,7 @@ const ConversationRender = ({messages}: { messages: any[] | undefined }) => {
 					>
 						<div
 							className={`text-black p-4 rounded-lg shadow ${message?.type === 'human' ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'}`}>
-							{message?.content}
+							<MarkdownMessage message={message?.content}/>
 							<CopyButton text={message?.content}/>
 						</div>
 					</div>
@@ -84,21 +96,21 @@ export default function Conversation({params}: { params: PageParams }) {
 	}, []);
 
 	return (
-<>
-  <div className="relative min-h-screen pb-16">
-    <div className="p-4 sm:ml-64">
-      <ConversationRender messages={conversation} />
-    </div>
-  </div>
-  <div className="p-4 flex justify-center fixed bottom-0 w-full">
-    <form onSubmit={sendMessage} className="flex items-center">
-      <div className="sm:pl-64">
-        <Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)} />
-      </div>
-      <Button isLoading={isLoading} type={"submit"}>Send</Button>
-    </form>
-  </div>
-</>
+		<>
+			<div className="relative min-h-screen pb-16">
+				<div className="p-4 sm:ml-64">
+					<ConversationRender messages={conversation}/>
+				</div>
+			</div>
+			<div className="p-4 flex justify-center fixed bottom-0 w-full">
+				<form onSubmit={sendMessage} className="flex items-center">
+					<div className="sm:pl-64">
+						<Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)}/>
+					</div>
+					<Button isLoading={isLoading} type={"submit"}>Send</Button>
+				</form>
+			</div>
+		</>
 
 
 	);
