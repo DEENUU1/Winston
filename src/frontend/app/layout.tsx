@@ -3,6 +3,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SideBar from "@/components/SideBar";
+import {Providers} from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,10 +13,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={"dark"}>
       <body className={inter.className}>
-      <SideBar/>
-      {children}
+        <Providers>
+          <SideBar/>
+          {children}
+        </Providers>
       </body>
     </html>
   );

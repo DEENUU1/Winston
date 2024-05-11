@@ -35,8 +35,8 @@ def get_agent_details_by_id(id: int, db: Session = Depends(get_db)):
 
 @router.put("/{id}")
 def update_agent(id: int, data: AgentUpdateSchema, db: Session = Depends(get_db)):
-    return AgentService(db).update_agent(id, data)
-
+    AgentService(db).update_agent(id, data)
+    return {"status": "success"}
 
 @router.delete("/{id}")
 def delete_agent(id: int, db: Session = Depends(get_db)):
