@@ -2,6 +2,8 @@
 
 import CopyButton from "@/components/CopyButton";
 import {useEffect, useState} from "react";
+import {Input, Button} from "@nextui-org/react";
+
 
 interface PageParams {
 	slug: string;
@@ -38,6 +40,7 @@ export default function Conversation({params}: { params: PageParams }) {
 	const sessionId = params.slug;
 	const [conversation, setConversation] = useState([])
 	const [message, setMessage] = useState('')
+	const [isLoading, setIsLoading] = useState(false);
 
 	const fetchChatHistory = async () => {
 		try {
@@ -51,6 +54,8 @@ export default function Conversation({params}: { params: PageParams }) {
 
 	const sendMessage = async (e: any) => {
 		e.preventDefault();
+		setMessage('');
+		setIsLoading(true);
 
 		try {
 			const response = await fetch("http://localhost:8000/conversation/" + sessionId, {
@@ -63,7 +68,7 @@ export default function Conversation({params}: { params: PageParams }) {
 			});
 
 			if (response.ok) {
-				setMessage('');
+				setIsLoading(false);
 			} else {
 				console.log("Can't send message");
 			}
@@ -79,18 +84,22 @@ export default function Conversation({params}: { params: PageParams }) {
 	}, []);
 
 	return (
-		<>
-			<div className="p-4 sm:ml-64">
+<>
+  <div className="relative min-h-screen pb-16">
+    <div className="p-4 sm:ml-64">
+      <ConversationRender messages={conversation} />
+    </div>
+  </div>
+  <div className="p-4 flex justify-center fixed bottom-0 w-full">
+    <form onSubmit={sendMessage} className="flex items-center">
+      <div className="sm:pl-64">
+        <Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)} />
+      </div>
+      <Button isLoading={isLoading} type={"submit"}>Send</Button>
+    </form>
+  </div>
+</>
 
-				<ConversationRender messages={conversation}/>
 
-				<form onSubmit={sendMessage}>
-					<input type={"text"} onChange={(e) => setMessage(e.target.value)}/>
-					<button type={"submit"}>Send</button>
-				</form>
-			</div>
-
-
-		</>
 	);
 }
