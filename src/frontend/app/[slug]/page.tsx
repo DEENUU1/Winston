@@ -1,10 +1,12 @@
 'use client';
 
 import CopyButton from "@/components/CopyButton";
-import {useEffect, useState} from "react";
-import {Button, Input} from "@nextui-org/react";
+import {useCallback, useEffect, useState} from "react";
+import {Button, Input, Select, SelectItem} from "@nextui-org/react";
 import Markdown from "react-markdown";
 import gfm from 'remark-gfm';
+import {Simulate} from "react-dom/test-utils";
+import seeked = Simulate.seeked;
 
 interface PageParams {
 	slug: string;
@@ -19,6 +21,17 @@ export function MarkdownMessage({message}: { message: string }) {
 			</div>
 		</>
 	)
+}
+
+async function getSnippets() {
+	const res = await fetch("http://localhost:8000/snippet/", {
+		method: "GET",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		cache: "no-cache"
+	})
+	return res.json()
 }
 
 
@@ -53,6 +66,8 @@ export default function Conversation({params}: { params: PageParams }) {
 	const [conversation, setConversation] = useState([])
 	const [message, setMessage] = useState('')
 	const [isLoading, setIsLoading] = useState(false);
+	const [snippets, setSnippets] = useState([]);
+	const [selectedSnippetPrompt, setSelectedSnippetPrompt] = useState('');
 
 	const fetchChatHistory = async () => {
 		try {
@@ -63,6 +78,15 @@ export default function Conversation({params}: { params: PageParams }) {
 			console.log("Error fetching chat history");
 		}
 	};
+
+	const fetchSnippets = async () => {
+		try {
+			const snippets = await getSnippets();
+			setSnippets(snippets);
+		} catch (error) {
+			console.log("Error fetching snippets");
+		}
+	}
 
 	const sendMessage = async (e: any) => {
 		e.preventDefault();
@@ -76,7 +100,7 @@ export default function Conversation({params}: { params: PageParams }) {
 					'Content-Type': 'application/json',
 					'accept': 'application/json'
 				},
-				body: JSON.stringify({'message': message})
+				body: JSON.stringify({'message': `${selectedSnippetPrompt} ${message}`})
 			});
 
 			if (response.ok) {
@@ -88,12 +112,28 @@ export default function Conversation({params}: { params: PageParams }) {
 			console.log("Error sending message. Please try again later.");
 		} finally {
 			await fetchChatHistory();
+			setSelectedSnippetPrompt("");
 		}
 	}
 
 	useEffect(() => {
 		fetchChatHistory();
+		fetchSnippets();
 	}, []);
+
+	const transformedSnippets = [
+		{ label: 'None', value: '', description: 'None' },
+		...snippets?.map(item => ({
+			label: item?.name,
+			value: item?.prompt,
+			description: item?.prompt
+		}))
+	];
+
+	const handleSnippetSelection = (value: any) => {
+		console.log(value);
+		setSelectedSnippetPrompt(value);
+	}
 
 	return (
 		<>
@@ -104,6 +144,20 @@ export default function Conversation({params}: { params: PageParams }) {
 			</div>
 			<div className="p-4 flex justify-center fixed bottom-0 w-full">
 				<form onSubmit={sendMessage} className="flex items-center">
+				<Select
+					onChange={(e) => handleSnippetSelection(e.target.value)}
+					items={transformedSnippets}
+					label="Snippet"
+					placeholder="Select a snippet"
+					className="max-w-xs"
+				>
+					{(snippet) => (
+						<SelectItem key={snippet.value} value={snippet.value}>
+							{snippet.label}
+						</SelectItem>
+					)}
+				</Select>
+
 					<div className="sm:pl-64">
 						<Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)}/>
 					</div>
