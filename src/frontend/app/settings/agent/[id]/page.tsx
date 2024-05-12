@@ -3,6 +3,7 @@
 import Image from "next/image";
 import {Button, Input, Select, SelectItem, Slider} from "@nextui-org/react";
 import {useEffect, useState} from "react";
+import { useRouter } from 'next/navigation'
 
 
 import {Textarea} from "@nextui-org/input";
@@ -48,6 +49,16 @@ async function updateTool(agentId: string, data: any) {
 	return res.json()
 }
 
+async function deleteAgent(agentId: number) {
+	const res = await fetch("http://localhost:8000/agent/" + agentId + "/", {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	return res.json()
+}
+
 interface PageParams {
 	id: string;
 }
@@ -57,6 +68,7 @@ export default function AgentDetails({params}: { params: PageParams }) {
 	const [agent, setAgent] = useState()
 	const [tools, setTools] = useState()
 	const [llms, setLLMs] = useState()
+	const router = useRouter()
 
 	const handleDataFetch = async () => {
 		const agentData = await getAgent(params.id);
@@ -69,9 +81,13 @@ export default function AgentDetails({params}: { params: PageParams }) {
 
 	}
 
+	const handleDeleteAgent = async (e: any) => {
+		e.preventDefault();
+		await deleteAgent(parseInt(params.id));
+		router.push('/settings');
+	}
+
 	useEffect(() => {
-
-
 		handleDataFetch()
 	}, [params.id])
 
@@ -111,8 +127,7 @@ export default function AgentDetails({params}: { params: PageParams }) {
 				};
 				await updateTool(agentId, requestData);
 				handleDataFetch();
-			}
-			else if (!isToolAssigned) {
+			} else if (!isToolAssigned) {
 				const requestData = {
 					operation_type: "add",
 					tool_id: toolId
@@ -200,6 +215,10 @@ export default function AgentDetails({params}: { params: PageParams }) {
 						>
 							Update
 						</Button>
+					</form>
+
+					<form className="flex flex-col items-center mt-10" onSubmit={handleDeleteAgent}>
+						<Button type={"submit"} color={"danger"} className="w-full max-w-md mt-5">Delete agent</Button>
 					</form>
 
 					<form className="flex flex-col items-center mt-10">
