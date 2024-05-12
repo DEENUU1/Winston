@@ -77,12 +77,37 @@ async function updateSnippet(id: number, data: any) {
 	return res.json()
 }
 
+async function createSnippet(data: any) {
+	const res = await fetch("http://localhost:8000/snippet/", {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+	return res.json()
+}
+
+async function createAgent(data: any) {
+	const res = await fetch("http://localhost:8000/agent/", {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+	return res.json()
+}
+
 export default function Settings() {
 	const [settings, setSettings] = useState<any>(null);
 	const [agents, setAgents] = useState<any[]>([]);
 	const [snippets, setSnippets] = useState<any[]>([]);
-	const {isOpen, onOpen, onOpenChange} = useDisclosure();
+	const updateSnippetModal = useDisclosure();
+	const createSnippetModal = useDisclosure();
 	const [currentSnippet, setCurrentSnippet] = useState<any>({name: '', prompt: ''});
+	const [newSnippet, setNewSnippet] = useState({name: '', prompt: ''})
+	const [newAgent, setNewAgent] = useState({name: '', description: '', prompt: '', llm_id: 1, temperature: 0.0})
 
 	const fetchData = async () => {
 		const agentsData = await getAgents();
@@ -92,6 +117,26 @@ export default function Settings() {
 		setSettings(settingsData);
 		setSnippets(snippetsData);
 	};
+
+	const handleSnippetCreate = async (e: any) => {
+		e.preventDefault();
+		try{
+			await createSnippet(newSnippet);
+			fetchData();
+		} catch (error){
+			console.error("Error creating snippet:", error);
+		}
+	}
+
+	const handleAgentCreate = async (e: any) => {
+		e.preventDefault();
+		try{
+			await createAgent(newAgent);
+			fetchData();
+		} catch (error){
+			console.error("Error creating agent:", error);
+		}
+	}
 
 	useEffect(() => {
 		fetchData();
@@ -125,7 +170,7 @@ export default function Settings() {
 		try {
 			const newSettings = {...settings, agent_id: agentId};
 			await updateSettings(newSettings);
-
+			setNewSnippet({name: '', prompt: ''})
 			fetchData();
 		} catch (error) {
 			console.error('Error updating settings:', error);
@@ -137,6 +182,41 @@ export default function Settings() {
 			<div className="p-4 sm:ml-64">
 				<h1>Settings</h1>
 				<h2>Agents</h2>
+
+				<Button className={"mt-5 mb-5"} color={"success"} onPress={createSnippetModal.onOpen}>Open Modal</Button>
+				<Modal isOpen={createSnippetModal.isOpen} onOpenChange={createSnippetModal.onOpenChange}>
+					<ModalContent>
+						{(onClose) => (
+							<>
+								<form onSubmit={handleSnippetCreate}>
+									<ModalHeader className="flex flex-col gap-1">Create snippet</ModalHeader>
+									<ModalBody>
+										<Input
+											label={'Name'}
+											required={true}
+											value={newSnippet.name}
+                      onChange={(e) => setNewSnippet({ ...newSnippet, name: e.target.value })}
+										/>
+										<Textarea
+											label={'Prompt'}
+											required={true}
+											value={newSnippet.prompt}
+                      onChange={(e) => setNewSnippet({ ...newSnippet, prompt: e.target.value })}
+										/>
+									</ModalBody>
+									<ModalFooter>
+										<Button color="danger" variant="light" onPress={onClose}>
+											Close
+										</Button>
+										<Button type={"submit"} color="primary" onPress={onClose}>
+											Create
+										</Button>
+									</ModalFooter>
+								</form>
+							</>
+						)}
+					</ModalContent>
+				</Modal>
 
 				{agents.map((agent: any) => {
 					return (
@@ -160,7 +240,7 @@ export default function Settings() {
 					);
 				})}
 
-				<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+				<Modal isOpen={updateSnippetModal.isOpen} onOpenChange={updateSnippetModal.onOpenChange}>
 					<ModalContent>
 						{(onClose) => (
 							<>
@@ -208,7 +288,7 @@ export default function Settings() {
 											name: snippet?.name,
 											prompt: snippet?.prompt
 										});
-										onOpen();
+										updateSnippetModal.onOpen();
 									}} color={'warning'}>
 										Update
 									</Button>
