@@ -1,3 +1,5 @@
+.idea/
+src/backend/media/
 src/backend/ai/data.txt
 ../.idea/
 db/
