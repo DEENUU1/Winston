@@ -1,6 +1,6 @@
 from config.database import get_db
+from repositories.settings_repository import SettingsRepository
 from schemas.settings_schema import SettingsInputSchema
-from services.settings_service import SettingsService
 
 
 def create_settings() -> None:
@@ -8,8 +8,10 @@ def create_settings() -> None:
 
     db = next(get_db())
 
-    settings_service = SettingsService(db)
+    settings_repository = SettingsRepository(db)
     settings_input = SettingsInputSchema(agent_id=1)
-    settings_service.create_settings(settings_input)
+
+    if not settings_repository.settings_exists_by_id(1):
+        settings_repository.create_settings(settings_input)
 
     print("Creating settings done!")
