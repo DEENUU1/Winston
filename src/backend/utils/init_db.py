@@ -4,6 +4,7 @@ from models.llm import LLM
 from models.tool import Tool
 from models.agent import Agent
 from models.settings import Settings
+from models.snippet import Snippet
 
 
 def create_tables():
@@ -12,3 +13,4 @@ def create_tables():
     LLM.metadata.create_all(bind=engine)
     Tool.metadata.create_all(bind=engine)
     Settings.metadata.create_all(bind=engine)
+    Snippet.metadata.create_all(bind=engine)
