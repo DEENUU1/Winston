@@ -1,9 +1,20 @@
 'use client'
 
-import {Switch, Button} from "@nextui-org/react"
+import {
+	Button,
+	Input,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	Switch,
+	Textarea,
+	useDisclosure
+} from "@nextui-org/react"
 import {useEffect, useState} from "react";
 
-async function getAgents(){
+async function getAgents() {
 	const res = await fetch("http://localhost:8000/agent/",
 		{"cache": "no-cache"}
 	)
@@ -33,7 +44,7 @@ async function updateSettings(data: any) {
 	return res.json();
 }
 
-async function getSnippets(){
+async function getSnippets() {
 	const res = await fetch("http://localhost:8000/snippet/", {
 		method: "GET",
 		headers: {
@@ -55,10 +66,23 @@ async function deleteSnippet(id: number) {
 	return res.json()
 }
 
+async function updateSnippet(id: number, data: any) {
+	const res = await fetch("http://localhost:8000/snippet/" + id, {
+		method: "PUT",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+	return res.json()
+}
+
 export default function Settings() {
 	const [settings, setSettings] = useState<any>(null);
 	const [agents, setAgents] = useState<any[]>([]);
 	const [snippets, setSnippets] = useState<any[]>([]);
+	const {isOpen, onOpen, onOpenChange} = useDisclosure();
+	const [currentSnippet, setCurrentSnippet] = useState<any>({name: '', prompt: ''});
 
 	const fetchData = async () => {
 		const agentsData = await getAgents();
@@ -77,6 +101,16 @@ export default function Settings() {
 		return settings?.agent_id === agentId;
 	}
 
+	const handleSnippetUpdate = async (e: any) => {
+		e.preventDefault();
+		try {
+			await updateSnippet(currentSnippet.id, {name: currentSnippet.name, prompt: currentSnippet.prompt});
+			fetchData();
+		} catch (error) {
+			console.error('Error updating snippet:', error);
+		}
+	};
+
 	const handleSnippetDelete = async (e: any, snippetId: number) => {
 		e.preventDefault();
 		try {
@@ -89,7 +123,7 @@ export default function Settings() {
 
 	const handleAgentToggle = async (agentId: number) => {
 		try {
-			const newSettings = { ...settings, agent_id: agentId };
+			const newSettings = {...settings, agent_id: agentId};
 			await updateSettings(newSettings);
 
 			fetchData();
@@ -109,7 +143,8 @@ export default function Settings() {
 						<div key={agent.id} className="mb-4">
 							<div className="flex items-center bg-gray-600 rounded-lg shadow-lg p-6">
 								<div className="w-16 h-16 mr-4">
-									<img src={`http://localhost:8000/${agent.avatar}`} alt="Image" className="w-full h-full object-cover rounded-full"/>
+									<img src={`http://localhost:8000/${agent.avatar}`} alt="Image"
+											 className="w-full h-full object-cover rounded-full"/>
 								</div>
 
 								<div className="flex-1">
@@ -125,6 +160,38 @@ export default function Settings() {
 					);
 				})}
 
+				<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+					<ModalContent>
+						{(onClose) => (
+							<>
+								<ModalHeader className="flex flex-col gap-1">Update Snippet</ModalHeader>
+								<ModalBody>
+									<Input
+										label={'Name'}
+										required={true}
+										value={currentSnippet.name}
+										onChange={(e) => setCurrentSnippet({...currentSnippet, name: e.target.value})}
+									/>
+									<Textarea
+										label={'Prompt'}
+										required={true}
+										value={currentSnippet.prompt}
+										onChange={(e) => setCurrentSnippet({...currentSnippet, prompt: e.target.value})}
+									/>
+								</ModalBody>
+								<ModalFooter>
+									<Button onPress={onClose} color="danger" variant="light">
+										Close
+									</Button>
+									<Button onPress={onClose} type={'submit'} color="warning" onClick={handleSnippetUpdate}>
+										Update
+									</Button>
+								</ModalFooter>
+							</>
+						)}
+					</ModalContent>
+				</Modal>
+
 				{snippets?.map((snippet: any) => {
 					return (
 						<div key={snippet.id} className="mb-4">
@@ -135,8 +202,20 @@ export default function Settings() {
 								</div>
 
 								<div className="flex items-center">
-									<Button color={"warning"}>Update</Button>
-									<form onSubmit={(e) => {e.preventDefault(); handleSnippetDelete(e, snippet.id)}}>
+									<Button onClick={() => {
+										setCurrentSnippet({
+											id: snippet?.id,
+											name: snippet?.name,
+											prompt: snippet?.prompt
+										});
+										onOpen();
+									}} color={'warning'}>
+										Update
+									</Button>
+									<form onSubmit={(e) => {
+										e.preventDefault();
+										handleSnippetDelete(e, snippet.id)
+									}}>
 										<Button type={"submit"} color={"danger"}>Delete</Button>
 									</form>
 								</div>
