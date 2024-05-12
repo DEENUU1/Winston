@@ -35,15 +35,15 @@ class SnippetRepository:
     def get_snippets(self) -> List[SnippetOutputSchema]:
         return [SnippetOutputSchema.from_orm(provider) for provider in self.session.query(Snippet).all()]
 
-    def update_snippet(self, agent: Type[Snippet], data: SnippetUpdateSchema) -> SnippetOutputSchema:
+    def update_snippet(self, snippet: Type[Snippet], data: SnippetUpdateSchema) -> SnippetOutputSchema:
         for key, value in data.model_dump(exclude_none=True).items():
-            setattr(agent, key, value)
+            setattr(snippet, key, value)
         self.session.commit()
-        self.session.refresh(agent)
-        return SnippetOutputSchema.from_orm(agent)
+        self.session.refresh(snippet)
+        return SnippetOutputSchema.from_orm(snippet)
 
-    def delete_snippet(self, agent: Type[Snippet]) -> None:
-        self.session.delete(agent)
+    def delete_snippet(self, snippet: Type[Snippet]) -> None:
+        self.session.delete(snippet)
         self.session.commit()
         return
 
