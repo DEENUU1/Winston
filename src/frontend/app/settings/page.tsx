@@ -105,6 +105,7 @@ export default function Settings() {
 	const [snippets, setSnippets] = useState<any[]>([]);
 	const updateSnippetModal = useDisclosure();
 	const createSnippetModal = useDisclosure();
+	const createAgentModal = useDisclosure();
 	const [currentSnippet, setCurrentSnippet] = useState<any>({name: '', prompt: ''});
 	const [newSnippet, setNewSnippet] = useState({name: '', prompt: ''})
 	const [newAgent, setNewAgent] = useState({name: '', description: '', prompt: '', llm_id: 1, temperature: 0.0})
@@ -183,7 +184,48 @@ export default function Settings() {
 				<h1>Settings</h1>
 				<h2>Agents</h2>
 
-				<Button className={"mt-5 mb-5"} color={"success"} onPress={createSnippetModal.onOpen}>Open Modal</Button>
+				<Button className={"mt-5 mb-5"} color={"success"} onPress={createAgentModal.onOpen}>Create agent</Button>
+				<Modal isOpen={createAgentModal.isOpen} onOpenChange={createAgentModal.onOpenChange}>
+					<ModalContent>
+						{(onClose) => (
+							<>
+								<form onSubmit={handleAgentCreate}>
+									<ModalHeader className="flex flex-col gap-1">Create agent</ModalHeader>
+									<ModalBody>
+										<Input
+											label={'Name'}
+											required={true}
+											value={newAgent.name}
+                      onChange={(e) => setNewAgent({ ...newAgent, name: e.target.value })}
+										/>
+										<Textarea
+											label={'Description'}
+											required={true}
+											value={newAgent.description}
+                      onChange={(e) => setNewAgent({ ...newAgent, description: e.target.value })}
+										/>
+										<Textarea
+											label={'Prompt'}
+											required={true}
+											value={newAgent.prompt}
+                      onChange={(e) => setNewAgent({ ...newAgent, prompt: e.target.value })}
+										/>
+									</ModalBody>
+									<ModalFooter>
+										<Button color="danger" variant="light" onPress={onClose}>
+											Close
+										</Button>
+										<Button type={"submit"} color="primary" onPress={onClose}>
+											Create
+										</Button>
+									</ModalFooter>
+								</form>
+							</>
+						)}
+					</ModalContent>
+				</Modal>
+
+				<Button className={"mt-5 mb-5"} color={"success"} onPress={createSnippetModal.onOpen}>Creates snippet</Button>
 				<Modal isOpen={createSnippetModal.isOpen} onOpenChange={createSnippetModal.onOpenChange}>
 					<ModalContent>
 						{(onClose) => (
