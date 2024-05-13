@@ -1,12 +1,11 @@
 'use client';
 
 import CopyButton from "@/components/CopyButton";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Button, Input, Select, SelectItem} from "@nextui-org/react";
 import Markdown from "react-markdown";
 import gfm from 'remark-gfm';
 import {Simulate} from "react-dom/test-utils";
-import seeked = Simulate.seeked;
 
 interface PageParams {
 	slug: string;
@@ -122,7 +121,7 @@ export default function Conversation({params}: { params: PageParams }) {
 	}, []);
 
 	const transformedSnippets = [
-		{ label: 'None', value: '', description: 'None' },
+		{label: 'None', value: '', description: 'None'},
 		...snippets?.map(item => ({
 			label: item?.name,
 			value: item?.prompt,
@@ -144,20 +143,19 @@ export default function Conversation({params}: { params: PageParams }) {
 			</div>
 			<div className="p-4 flex justify-center fixed bottom-0 w-full">
 				<form onSubmit={sendMessage} className="flex items-center">
-				<Select
-					onChange={(e) => handleSnippetSelection(e.target.value)}
-					items={transformedSnippets}
-					label="Snippet"
-					placeholder="Select a snippet"
-					className="max-w-xs"
-				>
-					{(snippet) => (
-						<SelectItem key={snippet.value} value={snippet.value}>
-							{snippet.label}
-						</SelectItem>
-					)}
-				</Select>
-
+					<Select
+						onChange={(e) => handleSnippetSelection(e.target.value)}
+						items={transformedSnippets}
+						label="Snippet"
+						placeholder="Select a snippet"
+						className="max-w-xs"
+					>
+						{(snippet) => (
+							<SelectItem key={snippet.value} value={snippet.value}>
+								{snippet.label}
+							</SelectItem>
+						)}
+					</Select>
 					<div className="sm:pl-64">
 						<Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)}/>
 					</div>

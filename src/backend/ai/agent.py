@@ -12,12 +12,12 @@ def setup_agent(session_id: str):
     db = next(get_db())
 
     settings = SettingsService(db).get_settings_detail_by_id(1)
-    agent = AgentService(db).get_agent_details_by_id(settings.agent_id)
+    agent_object = AgentService(db).get_agent_details_by_id(settings.agent_id)
 
     memory = setup_memory(session_id=session_id)
-    llm = get_llm(agent)
-    tools = get_tools(agent, llm)
-    base_prompt = get_base_prompt(agent)
+    llm = get_llm(agent_object)
+    tools = get_tools(agent_object, llm)
+    base_prompt = get_base_prompt(agent_object)
 
     agent = create_tool_calling_agent(llm, tools, base_prompt)
 

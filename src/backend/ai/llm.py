@@ -16,7 +16,7 @@ def get_llm(agent: AgentOutputSchema):
         return ChatOpenAI(groq_api_key=provider.api_key, temperature=agent.temperature)
 
     elif provider_name == "Groq":
-        return ChatGroq(groq_api_key=provider.api_key, temperature=agent.temperature)
+        return ChatGroq(groq_api_key=provider.api_key) #, temperature=agent.temperature)
 
     else:
         raise Exception("Provider not supported")
