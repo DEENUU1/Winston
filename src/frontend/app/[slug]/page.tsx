@@ -6,7 +6,7 @@ import {Button, Input, Select, SelectItem} from "@nextui-org/react";
 import Markdown from "react-markdown";
 import gfm from 'remark-gfm';
 import {toast} from "react-toastify";
-
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 
 interface PageParams {
 	slug: string;
@@ -38,6 +38,17 @@ async function createFile(formData: any, session_id: string){
 	const res = await fetch("http://localhost:8000/file/chat/" + session_id + "/", {
 		method: "POST",
 		body: formData
+	})
+	return res.json()
+}
+
+async function getFiles(session_id: string){
+	const res = await fetch("http://localhost:8000/file/chat/" + session_id + "/", {
+		method: "GET",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		cache: "no-cache"
 	})
 	return res.json()
 }
@@ -79,6 +90,25 @@ export default function Conversation({params}: { params: PageParams }) {
 	const [snippets, setSnippets] = useState([]);
 	const [selectedSnippetPrompt, setSelectedSnippetPrompt] = useState('');
   const [file, setFile] = useState(null);
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+	const [files, setFiles] = useState([])
+
+	const fetchFiles = async () => {
+		try {
+			const files = await getFiles(sessionId);
+			setFiles(files);
+		} catch (error) {
+			console.log(error)
+		} finally {
+			console.log("Fetch files")
+		}
+	};
+
+	useEffect(() => {
+		if (isOpen) {
+			fetchFiles();
+		}
+	}, [isOpen]);
 
 	const handleFileChange = async (event: any) => {
 		const file = event.target.files[0];
@@ -173,6 +203,32 @@ export default function Conversation({params}: { params: PageParams }) {
 		<>
 			<div className="relative min-h-screen pb-16">
 				<div className="p-4 sm:ml-64">
+					<Button onPress={onOpen}>Files</Button>
+					<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+						<ModalContent>
+							{(onClose) => (
+								<>
+									<ModalHeader className="flex flex-col gap-1">Files</ModalHeader>
+									<ModalBody>
+										{files?.map((file, index) => (
+											<div key={index} className="flex flex-col gap-1">
+												<h2 className={"font-bold"}>{file?.original_file_name}</h2>
+												<span className={"text-gray-400"}>{file?.path}</span>
+											</div>
+										))}
+
+									</ModalBody>
+									<ModalFooter>
+										<Button color="danger" variant="light" onPress={onClose}>
+											Close
+										</Button>
+									</ModalFooter>
+								</>
+							)}
+						</ModalContent>
+					</Modal>
+
+
 					<ConversationRender messages={conversation}/>
 				</div>
 			</div>

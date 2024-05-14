@@ -17,7 +17,7 @@ class FileRepository:
         return FileOutput.from_orm(file)
 
     def get_files_by_session_id(self, session_id: str) -> List[FileOutput]:
-        return [FileOutput.from_orm(file) for file in self.session.query(File).filter_by(session_id=session_id).all()]
+        return [FileOutput.from_orm(file) for file in self.session.query(File).filter_by(message_store_session_id=session_id).all()]
 
     def get_file_details_by_id(self, _id: int) -> FileOutput:
         return FileOutput.from_orm(self.session.query(File).filter_by(id=_id).first())
