@@ -10,6 +10,7 @@ class File(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     path = Column(String)
+    original_file_name = Column(String)
     message_store_session_id = Column(Text, ForeignKey('message_store.session_id'))
 
     message = relationship("Message", back_populates="files")

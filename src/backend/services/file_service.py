@@ -26,6 +26,6 @@ class FileService:
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        file_input = FileInput(name=file.filename, path=file_path, message_store_session_id=session_id)
+        file_input = FileInput(name=file.filename, original_file_name=file.filename, path=file_path, message_store_session_id=session_id)
 
         return self.file_repository.create_file(file_input)
