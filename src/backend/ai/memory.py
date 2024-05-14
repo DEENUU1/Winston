@@ -38,6 +38,15 @@ class CustomSQLChatMessageHistory(SQLChatMessageHistory):
             custom_message_converter=custom_converter_instance,
         )
 
+    def session_id_exists(self, session_id: str) -> bool:
+        with self.Session() as session:
+            result = (
+                session.query(self.sql_model_class)
+                .filter(getattr(self.sql_model_class, self.session_id_field_name) == session_id)
+                .first()
+            )
+            return bool(result)
+
     def search_conversations_by_content(self, query: str) -> List[str]:
         with self.Session() as session:
             result = (

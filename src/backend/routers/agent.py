@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.orm import Session
 

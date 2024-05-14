@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from . import conversation, provider, llm, tool, settings, agent, snippet
+from . import conversation, provider, llm, tool, settings, agent, snippet, file
 
 
 router = APIRouter(
@@ -13,3 +13,4 @@ router.include_router(tool.router)
 router.include_router(settings.router)
 router.include_router(agent.router)
 router.include_router(snippet.router)
+router.include_router(file.router)
