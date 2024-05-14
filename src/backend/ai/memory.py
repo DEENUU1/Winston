@@ -1,29 +1,18 @@
-from typing import Any, List, Optional
+from typing import List, Optional
 
 from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_message_histories import SQLChatMessageHistory
 from langchain_community.chat_message_histories.sql import DefaultMessageConverter, BaseMessageConverter
 from langchain_core.messages import BaseMessage, AIMessage
-from sqlalchemy import Column, Integer, Text, DateTime, func
-from sqlalchemy.orm import declarative_base
+
 from config.settings import settings
-
-
-def custom_create_message_model(table_name: str, DynamicBase: Any) -> Any:
-    class Message(DynamicBase):  # type: ignore[valid-type, misc]
-        __tablename__ = table_name
-        id = Column(Integer, primary_key=True)
-        session_id = Column(Text)
-        message = Column(Text, index=True)
-        created_at = Column(DateTime, default=func.now())
-
-    return Message
+from models.message import Message
 
 
 class CustomDefaultMessageConverter(DefaultMessageConverter):
     def __init__(self, table_name: str):
         super().__init__(table_name)
-        self.model_class = custom_create_message_model(table_name, declarative_base())
+        self.model_class = Message
 
 
 class CustomSQLChatMessageHistory(SQLChatMessageHistory):

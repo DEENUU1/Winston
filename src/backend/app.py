@@ -7,6 +7,7 @@ from routers.router import router
 from tasks import create_providers, create_llms, create_tools, create_agents, create_settings, create_snippets
 from utils.init_db import create_tables
 
+
 app = FastAPI(
     debug=bool(settings.DEBUG),
     title=settings.TITLE,

@@ -13,6 +13,8 @@ import {
 	useDisclosure
 } from "@nextui-org/react"
 import {useEffect, useState} from "react";
+import {toast} from "react-toastify";
+
 
 async function getAgents() {
 	const res = await fetch("http://localhost:8000/agent/",
@@ -124,8 +126,9 @@ export default function Settings() {
 		try{
 			await createSnippet(newSnippet);
 			fetchData();
+			toast.success("Snippet created")
 		} catch (error){
-			console.error("Error creating snippet:", error);
+			toast.error("Error creating snippet")
 		}
 	}
 

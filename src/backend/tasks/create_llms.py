@@ -20,4 +20,8 @@ def create_llms() -> None:
             created = llm_repository.create_llm(LLMInputSchema(name=llm, provider_id=groq_provider.id))
             print(f"Created llm: {created}")
 
+    if not llm_repository.llm_exists_by_name("gpt-3.5-turbo-0125"):
+        created = llm_repository.create_llm(LLMInputSchema(name="gpt-3.5-turbo-0125", provider_id=2))
+        print(f"Created llm: {created}")
+
     print("Creating llms done!")

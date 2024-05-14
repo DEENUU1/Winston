@@ -13,7 +13,7 @@ def get_llm(agent: AgentOutputSchema):
     provider_name = provider.name
 
     if provider_name == "OpenAI":
-        return ChatOpenAI(groq_api_key=provider.api_key, temperature=agent.temperature)
+        return ChatOpenAI(openai_api_key=provider.api_key, temperature=agent.temperature)
 
     elif provider_name == "Groq":
         return ChatGroq(groq_api_key=provider.api_key) #, temperature=agent.temperature)

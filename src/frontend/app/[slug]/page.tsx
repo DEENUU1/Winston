@@ -5,7 +5,8 @@ import {useEffect, useState} from "react";
 import {Button, Input, Select, SelectItem} from "@nextui-org/react";
 import Markdown from "react-markdown";
 import gfm from 'remark-gfm';
-import {Simulate} from "react-dom/test-utils";
+import {toast} from "react-toastify";
+
 
 interface PageParams {
 	slug: string;
@@ -74,7 +75,7 @@ export default function Conversation({params}: { params: PageParams }) {
 			const data = await response.json();
 			setConversation(data);
 		} catch (error) {
-			console.log("Error fetching chat history");
+			toast.error("Can't fetch chat history")
 		}
 	};
 
@@ -105,10 +106,11 @@ export default function Conversation({params}: { params: PageParams }) {
 			if (response.ok) {
 				setIsLoading(false);
 			} else {
-				console.log("Can't send message");
+				toast.error("Can't send message")
 			}
 		} catch (error) {
-			console.log("Error sending message. Please try again later.");
+			toast.error("Can't send message")
+			console.log(error)
 		} finally {
 			await fetchChatHistory();
 			setSelectedSnippetPrompt("");
@@ -130,7 +132,6 @@ export default function Conversation({params}: { params: PageParams }) {
 	];
 
 	const handleSnippetSelection = (value: any) => {
-		console.log(value);
 		setSelectedSnippetPrompt(value);
 	}
 
