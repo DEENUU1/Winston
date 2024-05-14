@@ -1,4 +1,6 @@
+import os
 import shutil
+import uuid
 
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
@@ -17,7 +19,9 @@ class FileService:
         if not self.message_history_service.session_id_exists(session_id):
             raise HTTPException(status_code=404, detail="Session not found")
 
-        file_path = f"media/files/{file.filename}"
+        file_extension = os.path.splitext(file.filename)[1]
+        random_filename = f"{uuid.uuid4()}{file_extension}"
+        file_path = f"media/files/{random_filename}"
 
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
