@@ -108,9 +108,11 @@ export default function Settings() {
 	const updateSnippetModal = useDisclosure();
 	const createSnippetModal = useDisclosure();
 	const createAgentModal = useDisclosure();
+	const settingsModal = useDisclosure();
 	const [currentSnippet, setCurrentSnippet] = useState<any>({name: '', prompt: ''});
 	const [newSnippet, setNewSnippet] = useState({name: '', prompt: ''})
 	const [newAgent, setNewAgent] = useState({name: '', description: '', prompt: '', llm_id: 1, temperature: 0.0})
+
 
 	const fetchData = async () => {
 		const agentsData = await getAgents();
@@ -186,6 +188,33 @@ export default function Settings() {
 			<div className="p-4 sm:ml-64">
 				<h1>Settings</h1>
 				<h2>Agents</h2>
+
+				<Button className={"mt-5 mb-5"} color={"success"} onPress={settingsModal.onOpen}>Settings</Button>
+				<Modal isOpen={settingsModal.isOpen} onOpenChange={settingsModal.onOpenChange}>
+					<ModalContent>
+						{(onClose) => (
+							<>
+								<form>
+									<ModalHeader className="flex flex-col gap-1">Update settings</ModalHeader>
+									<ModalBody>
+										<Input label={"OpenAI API Key"} value={settings?.openai_api_key}/>
+										<Input label={"Groq API Key"} value={settings?.groq_api_key}/>
+
+									</ModalBody>
+									<ModalFooter>
+										<Button color="danger" variant="light" onPress={onClose}>
+											Close
+										</Button>
+										<Button type={"submit"} color="warning" onPress={onClose}>
+											Update
+										</Button>
+									</ModalFooter>
+								</form>
+							</>
+						)}
+					</ModalContent>
+				</Modal>
+
 
 				<Button className={"mt-5 mb-5"} color={"success"} onPress={createAgentModal.onOpen}>Create agent</Button>
 				<Modal isOpen={createAgentModal.isOpen} onOpenChange={createAgentModal.onOpenChange}>
