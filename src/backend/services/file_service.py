@@ -9,6 +9,8 @@ from fastapi.exceptions import HTTPException
 from repositories.file_repository import FileRepository
 from schemas.file_schema import FileInput, FileOutput
 from services.message_history_service import MessageHistoryService
+from fastapi import BackgroundTasks
+from tasks.rag import rag_process
 
 
 class FileService:
@@ -16,7 +18,7 @@ class FileService:
         self.file_repository = FileRepository(session)
         self.message_history_service = MessageHistoryService()
 
-    def create_file(self, session_id: str, file: UploadFile) -> FileOutput:
+    def create_file(self, session_id: str, file: UploadFile, background_task) -> FileOutput:
         if not self.message_history_service.session_id_exists(session_id):
             raise HTTPException(status_code=404, detail="Session not found")
 
@@ -26,6 +28,8 @@ class FileService:
 
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
+
+        background_task.add_task(rag_process, file_path, session_id)
 
         file_input = FileInput(
             name=random_filename,

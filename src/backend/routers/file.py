@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File, BackgroundTasks
 from sqlalchemy.orm import Session
-
 from config.database import get_db
 from services.file_service import FileService
 
@@ -11,8 +10,13 @@ router = APIRouter(
 
 
 @router.post("/chat/{session_id}/")
-def upload_file(session_id: str, file: UploadFile = File(...), db: Session = Depends(get_db)):
-    return FileService(db).create_file(session_id, file)
+def upload_file(
+        session_id: str,
+        background_task: BackgroundTasks,
+        file: UploadFile = File(...),
+        db: Session = Depends(get_db)
+):
+    return FileService(db).create_file(session_id, file, background_task)
 
 
 @router.get("/chat/{session_id}/")
