@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Optional
 
 from langchain.docstore.document import Document
 from langchain.embeddings import OpenAIEmbeddings
@@ -25,3 +25,5 @@ def get_pinecone() -> Pinecone:
     embedding_func = get_embedding_func()
 
     return Pinecone.from_existing_index(index_name=settings.PINECONE_INDEX, embedding=embedding_func)
+
+

@@ -1,7 +1,7 @@
 from typing import List, Type
 
 from sqlalchemy.orm import Session
-from schemas.provider_schema import ProviderInputSchema, ProviderOutputSchema, ProviderUpdateApiKeySchema
+from schemas.provider_schema import ProviderInputSchema, ProviderOutputSchema
 from models.provider import Provider
 
 
@@ -30,12 +30,6 @@ class ProviderRepository:
 
     def get_provider_object_by_name(self, name: str) -> Type[Provider]:
         return self.session.query(Provider).filter_by(name=name).first()
-
-    def update_provider_api_key(self, provider: Type[Provider], data: ProviderUpdateApiKeySchema) -> ProviderOutputSchema:
-        provider.api_key = data.api_key
-        self.session.commit()
-        self.session.refresh(provider)
-        return ProviderOutputSchema.from_orm(provider)
 
     def get_providers(self) -> List[ProviderOutputSchema]:
         return [ProviderOutputSchema.from_orm(provider) for provider in self.session.query(Provider).all()]

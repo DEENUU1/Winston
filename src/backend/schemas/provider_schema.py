@@ -15,7 +15,3 @@ class ProviderOutputSchema(BaseModel):
         orm_mode = True
         from_attributes = True
 
-
-class ProviderUpdateApiKeySchema(BaseModel):
-    api_key: Optional[str] = None
-

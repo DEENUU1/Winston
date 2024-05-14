@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from ai.tools.current_time import CurrentTimeTool
 from schemas.agent_schema import AgentOutputSchema

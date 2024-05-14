@@ -9,6 +9,5 @@ class Provider(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String, unique=True, index=True)
-    api_key = Column(String, nullable=True)
 
     llms = relationship("LLM", back_populates="provider")
