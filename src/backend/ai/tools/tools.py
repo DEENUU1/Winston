@@ -1,12 +1,12 @@
 from typing import List, Optional
 
 from ai.tools.current_time import CurrentTimeTool
-from schemas.agent_schema import AgentOutputSchema
 from ai.tools.rag_tool import rag_tool
+from schemas.agent_schema import AgentOutputSchema
 
 
-def get_tools(agent: AgentOutputSchema, llm) -> List:
-    tools = [CurrentTimeTool(), rag_tool(llm)]
+def get_tools(agent: AgentOutputSchema, llm, session_id: Optional[str] = None) -> List:
+    tools = [CurrentTimeTool(), rag_tool(session_id)]
 
     # for tool in agent.tools:
     #     if tool.name == "current_time_tool":

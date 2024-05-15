@@ -16,7 +16,7 @@ def setup_agent(session_id: str):
 
     memory = setup_memory(session_id=session_id)
     llm = get_llm(agent_object)
-    tools = get_tools(agent_object, llm)
+    tools = get_tools(agent_object, llm, session_id)
     base_prompt = get_base_prompt(agent_object)
 
     agent = create_tool_calling_agent(llm, tools, base_prompt)

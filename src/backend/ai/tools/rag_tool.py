@@ -1,25 +1,21 @@
 from typing import Optional
 
-from langchain.chains import RetrievalQA
-from langchain_core.tools import Tool
+from langchain.tools.retriever import create_retriever_tool
 
 from ai.rag import get_pinecone
 
 
-def rag_tool(llm, session_id: Optional[str] = None) -> Tool:
-    if not session_id:
-        pinecone = get_pinecone()
+def rag_tool(session_id: Optional[str] = None):
+    pinecone = get_pinecone()
+
+    if session_id:
+        retriever = pinecone.as_retriever(search_type="similarity", search_kwargs={"k": 3}, namespace=session_id)
     else:
-        pinecone = get_pinecone(session_id)
+        retriever = pinecone.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
-    rag = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",
-        retriever=pinecone.as_retriever(search_type="similarity", search_kwargs={"k": 3})
+    retriever_tool = create_retriever_tool(
+        retriever,
+        "retriever_tool",
+        "Search for information about personal data and thinks about you don't have knowledge.",
     )
-
-    return Tool(
-        name="retriever_tool",
-        func=rag.run,
-        description="Use this tool to answer user's question about personal data and previous information"
-    )
+    return retriever_tool

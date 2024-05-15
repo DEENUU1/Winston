@@ -14,10 +14,14 @@ def get_embedding_func() -> OpenAIEmbeddings:
     return OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY, model=settings.OPENAI_EMBEDDING_MODEL)
 
 
-def save_to_pinecone(data: List[Document]):
+def save_to_pinecone(data: List[Document], session_id: Optional[str] = None):
     embedding_func = get_embedding_func()
 
-    vector_db = Pinecone.from_documents(data, embedding_func, index_name=settings.PINECONE_INDEX)
+    if session_id:
+        vector_db = Pinecone.from_documents(data, embedding_func, index_name=settings.PINECONE_INDEX, namespace=session_id)
+    else:
+        vector_db = Pinecone.from_documents(data, embedding_func, index_name=settings.PINECONE_INDEX)
+
     return vector_db
 
 

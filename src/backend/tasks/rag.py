@@ -11,4 +11,4 @@ def rag_process(file_path: str, session_id: str):
         document.metadata["file_source_page"] = file_metadata
         document.metadata["session_id"] = session_id
 
-        save_to_pinecone([document])
+    save_to_pinecone(documents, session_id)

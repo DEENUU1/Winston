@@ -199,7 +199,6 @@ export default function Settings() {
 									<ModalBody>
 										<Input label={"OpenAI API Key"} value={settings?.openai_api_key}/>
 										<Input label={"Groq API Key"} value={settings?.groq_api_key}/>
-
 									</ModalBody>
 									<ModalFooter>
 										<Button color="danger" variant="light" onPress={onClose}>
