@@ -142,7 +142,7 @@ export default function AgentDetails({params}: { params: PageParams }) {
 
 	return (
 		<>
-			<div className="p-4 sm:ml-64 flex justify-center">
+			<div className="p-4 flex justify-center">
 				<div className="w-full max-w-4xl">
 					<form className="flex flex-col items-center" onSubmit={handleAgentUpdate}>
 						<Image

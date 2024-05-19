@@ -185,7 +185,7 @@ export default function Settings() {
 
 	return (
 		<>
-			<div className="p-4 sm:ml-64">
+			<div className="p-4">
 				<h1>Settings</h1>
 				<h2>Agents</h2>
 

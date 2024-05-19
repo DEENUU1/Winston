@@ -70,7 +70,7 @@ export default function NavigationBar() {
 
 				<NavbarContent className="hidden sm:flex gap-4" justify="center">
 					<NavbarItem>
-						<Badge content="5">
+						<Badge content={conversations?.session_id?.length}>
 							<Link onPress={onOpen} color="foreground" href="#">
 								Conversations
 							</Link>
@@ -89,7 +89,7 @@ export default function NavigationBar() {
 				</NavbarContent>
 				<NavbarMenu>
 					<NavbarMenuItem>
-						<Badge content="5">
+						<Badge content={conversations?.session_id?.length}>
 							<Link onPress={onOpen} color="foreground" href="#">
 								Conversations
 							</Link>
@@ -110,7 +110,7 @@ export default function NavigationBar() {
 				<ModalContent>
 					{(onClose) => (
 						<>
-							<ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+							<ModalHeader className="flex flex-col gap-1">Conversations</ModalHeader>
 							<ModalBody>
 								<ul className="space-y-2 font-medium">
 									{conversations?.session_id?.map(session_id => (
