@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     OPENAI_EMBEDDING_MODEL: Optional[str] = os.getenv("OPENAI_EMBEDDING_MODEL")
     # Integrations
     SERPER_API_KEY: Optional[str] = os.getenv("SERPER_API_KEY")
+    OPENWEATHER_API_KEY: Optional[str] = os.getenv("OPENWEATHER_API_KEY")
 
 
 settings = Settings()

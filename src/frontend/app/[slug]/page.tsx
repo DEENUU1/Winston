@@ -232,36 +232,30 @@ export default function Conversation({params}: { params: PageParams }) {
 					<ConversationRender messages={conversation}/>
 				</div>
 			</div>
+
 			<div className="p-4 flex justify-center fixed bottom-0 w-full">
 				<form>
-					<div className="rounded-md p-4 shadow-md w-36">
 						<label htmlFor="upload" className="flex flex-col items-center gap-2 cursor-pointer">
-							<svg fill="#ffffff" height="25px" width="25px" version="1.1" id="Capa_1"
-									 xmlns="http://www.w3.org/2000/svg"
-									 viewBox="0 0 374.116 374.116">
+							<svg fill="#ffffff" height="25px" width="25px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 374.116 374.116">
 								<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
 								<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
 								<g id="SVGRepo_iconCarrier">
 									<g>
-										<path
-											d="M344.058,207.506c-16.568,0-30,13.432-30,30v76.609h-254v-76.609c0-16.568-13.432-30-30-30c-16.568,0-30,13.432-30,30 v106.609c0,16.568,13.432,30,30,30h314c16.568,0,30-13.432,30-30V237.506C374.058,220.938,360.626,207.506,344.058,207.506z"></path>
-										<path
-											d="M123.57,135.915l33.488-33.488v111.775c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30V102.426l33.488,33.488 c5.857,5.858,13.535,8.787,21.213,8.787c7.678,0,15.355-2.929,21.213-8.787c11.716-11.716,11.716-30.71,0-42.426L208.271,8.788 c-11.715-11.717-30.711-11.717-42.426,0L81.144,93.489c-11.716,11.716-11.716,30.71,0,42.426 C92.859,147.631,111.855,147.631,123.57,135.915z"></path>
+										<path d="M344.058,207.506c-16.568,0-30,13.432-30,30v76.609h-254v-76.609c0-16.568-13.432-30-30-30c-16.568,0-30,13.432-30,30 v106.609c0,16.568,13.432,30,30,30h314c16.568,0,30-13.432,30-30V237.506C374.058,220.938,360.626,207.506,344.058,207.506z"></path>
+										<path d="M123.57,135.915l33.488-33.488v111.775c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30V102.426l33.488,33.488 c5.857,5.858,13.535,8.787,21.213,8.787c7.678,0,15.355-2.929,21.213-8.787c11.716-11.716,11.716-30.71,0-42.426L208.271,8.788 c-11.715-11.717-30.711-11.717-42.426,0L81.144,93.489c-11.716,11.716-11.716,30.71,0,42.426 C92.859,147.631,111.855,147.631,123.57,135.915z"></path>
 									</g>
 								</g>
 							</svg>
 						</label>
 						<input id="upload" type="file" className="hidden" onChange={handleFileChange}/>
-					</div>
 				</form>
 
-				<form onSubmit={sendMessage} className="flex items-center">
+				<form onSubmit={sendMessage}>
 					<Select
 						onChange={(e) => handleSnippetSelection(e.target.value)}
 						items={transformedSnippets}
 						label="Snippet"
 						placeholder="Select a snippet"
-						className="max-w-xs"
 					>
 						{(snippet) => (
 							<SelectItem key={snippet.value} value={snippet.value}>
@@ -269,9 +263,8 @@ export default function Conversation({params}: { params: PageParams }) {
 							</SelectItem>
 						)}
 					</Select>
-					<div className="sm:pl-64">
-						<Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)}/>
-					</div>
+
+					<Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)}/>
 					<Button isLoading={isLoading} type={"submit"}>Send</Button>
 				</form>
 			</div>
