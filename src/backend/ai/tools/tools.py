@@ -5,12 +5,14 @@ from schemas.agent_schema import AgentOutputSchema
 from ai.tools.web_reader_tool import WebReaderTool
 from ai.tools.serper_tool import get_serper_tool
 from ai.tools.weather_tool import get_weather_tool
+from ai.tools.youtube_tool import YoutubeTool
 
 
 def get_tools(agent: AgentOutputSchema, llm, session_id: Optional[str] = None) -> List:
     tools = [
         rag_tool(session_id),
         WebReaderTool(),
+        YoutubeTool(),
         get_serper_tool(),
         get_weather_tool()
     ]

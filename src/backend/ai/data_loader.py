@@ -44,3 +44,18 @@ def split_files(file_path: str) -> List[Document]:
     documents = text_splitter.split_documents(document)
 
     return documents
+
+
+def split_raw_text(text: str) -> List[Document]:
+    """
+    Split raw text into chunks
+    """
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=0,
+        length_function=len,
+        is_separator_regex=False
+    )
+    documents = text_splitter.split_documents([Document(page_content=text)])
+
+    return documents
