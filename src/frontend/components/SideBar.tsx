@@ -5,30 +5,11 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation'
 
 
-function getConversations() {
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [conversationList, setConversationlist] = useState([]);
 
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	useEffect(() => {
-		fetch("http://localhost:8000/conversation/")
-			.then(response => response.json())
-			.then(data => setConversationlist(data));
-	}, []);
 
-	return conversationList;
-}
-
-async function createConversation() {
-	const res = await fetch("http://localhost:8000/conversation/new/", {
-		method: 'POST'
-	})
-	return res.json()
-}
 
 export default function SideBar(){
 	const conversations = getConversations();
-	const router = useRouter()
 
 	const handleCreateConversation = async () => {
 		const newConversation = await createConversation();
@@ -70,16 +51,7 @@ export default function SideBar(){
 						</li>
 					</ul>
 
-					<ul className="space-y-2 font-medium">
-						{conversations?.session_id?.map(session_id => (
-							<li key={session_id}>
-								<Link href={`/${session_id}`}
-											className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-									<span className="ms-3">{session_id}</span>
-								</Link>
-							</li>
-						))}
-					</ul>
+
 
 				</div>
 			</aside>
