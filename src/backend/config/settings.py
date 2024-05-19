@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
     PINECONE_INDEX: Optional[str] = os.getenv("PINECONE_INDEX")
     OPENAI_EMBEDDING_MODEL: Optional[str] = os.getenv("OPENAI_EMBEDDING_MODEL")
+    # Integrations
+    SERPER_API_KEY: Optional[str] = os.getenv("SERPER_API_KEY")
 
 
 settings = Settings()

@@ -1,4 +1,4 @@
-from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain.agents import AgentExecutor, create_tool_calling_agent, create_react_agent
 from ai.llm import get_llm
 from .memory import setup_memory
 from ai.tools.tools import get_tools

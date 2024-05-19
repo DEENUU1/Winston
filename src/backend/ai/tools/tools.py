@@ -4,10 +4,16 @@ from ai.tools.current_time import CurrentTimeTool
 from ai.tools.rag_tool import rag_tool
 from schemas.agent_schema import AgentOutputSchema
 from ai.tools.web_reader_tool import WebReaderTool
+from ai.tools.serper_tool import get_serper_tool
 
 
 def get_tools(agent: AgentOutputSchema, llm, session_id: Optional[str] = None) -> List:
-    tools = [CurrentTimeTool(), rag_tool(session_id), WebReaderTool()]
+    tools = [
+        CurrentTimeTool(),
+        rag_tool(session_id),
+        WebReaderTool(),
+        get_serper_tool()
+    ]
 
     # for tool in agent.tools:
     #     if tool.name == "current_time_tool":
