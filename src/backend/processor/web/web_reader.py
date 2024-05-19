@@ -15,16 +15,10 @@ class WebReader:
         filename = uuid.uuid4()
         return os.path.join(self.output_dir, f"{filename}.pdf")
 
-    def convert_html_to_pdf(self) -> str:
+    def convert_html_to_pdf(self, url: str) -> str:
         full_path = self.get_full_path()
 
-        converter.convert(
-            f"https://react.dev/learn/passing-props-to-a-component",
-            full_path,
-            print_options={
-                "scale": 0.50
-            }
-        )
+        converter.convert(url, full_path, print_options={"scale": 0.50})
         return full_path
 
 

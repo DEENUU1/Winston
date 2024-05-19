@@ -4,12 +4,12 @@ import uuid
 from typing import List
 
 from fastapi import UploadFile
-from sqlalchemy.orm import Session
 from fastapi.exceptions import HTTPException
+from sqlalchemy.orm import Session
+
 from repositories.file_repository import FileRepository
 from schemas.file_schema import FileInput, FileOutput
 from services.message_history_service import MessageHistoryService
-from fastapi import BackgroundTasks
 from tasks.rag import rag_process
 
 
