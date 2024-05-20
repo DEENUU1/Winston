@@ -233,7 +233,7 @@ export default function Conversation({params}: { params: PageParams }) {
 				</div>
 			</div>
 
-			<div className={"bottom-0 sticky p-4"}>
+			<div className={"bottom-0 sticky p-4 bg-black"}>
 				<form className={""} onSubmit={sendMessage}>
 					<div className="flex w-full flex-wrap md:flex-nowrap gap-4">
 						<Input value={message} type={"text"} onChange={(e) => setMessage(e.target.value)}/>
