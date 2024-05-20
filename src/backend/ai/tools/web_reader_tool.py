@@ -18,20 +18,22 @@ class WebReaderTool(BaseTool):
     args_schema: Type[BaseModel] = URLInput
 
     def _run(self, query: str, url: str):
-        metadata_url = process_web_page(url)
-
         pinecone = get_pinecone()
-
         retriever = pinecone.as_retriever(
             search_type="similarity",
             search_kwargs={
                 "k": 10,
                 "filter": {
-                    "url": metadata_url
+                    "url": url
                 }
             }
         )
-        docs = retriever.get_relevant_documents(query)
+        docs = retriever.get_relevant_documents("")
+
+        if len(docs) == 0:
+            process_web_page(url)
+
+        docs = retriever.get_relevant_documents("")
 
         content = ""
         for doc in docs:
