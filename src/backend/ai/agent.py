@@ -1,11 +1,12 @@
-from langchain.agents import AgentExecutor, create_tool_calling_agent, create_react_agent
+from langchain.agents import AgentExecutor, create_react_agent
+
 from ai.llm import get_llm
-from .memory import setup_memory
-from ai.tools.tools import get_tools
 from ai.prompt import get_base_prompt
-from services.agent_service import AgentService
+from ai.tools.tools import get_tools
 from config.database import get_db
+from services.agent_service import AgentService
 from services.settings_service import SettingsService
+from .memory import setup_memory
 
 
 def setup_agent(session_id: str):
@@ -19,7 +20,7 @@ def setup_agent(session_id: str):
     tools = get_tools(agent_object, llm, session_id)
     base_prompt = get_base_prompt(agent_object)
 
-    agent = create_tool_calling_agent(llm, tools, base_prompt)
+    agent = create_react_agent(llm, tools, base_prompt)
 
     agent_executor = AgentExecutor(
         agent=agent,
