@@ -8,7 +8,6 @@ from processor.web.web_processor import process_web_page
 
 
 class URLInput(BaseModel):
-    query: str = Field(description="The query provided by user to process and find on the given page")
     url: str = Field(description="The url provided by user to process")
 
 
@@ -17,7 +16,7 @@ class WebReaderTool(BaseTool):
     description = "Useful when user provides a url address to web page"
     args_schema: Type[BaseModel] = URLInput
 
-    def _run(self, query: str, url: str):
+    def _run(self, url: str):
         pinecone = get_pinecone()
         retriever = pinecone.as_retriever(
             search_type="similarity",

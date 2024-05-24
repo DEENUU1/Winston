@@ -26,6 +26,7 @@ def setup_agent(session_id: str):
         agent=agent,
         tools=tools,
         verbose=True,
-        memory=memory
+        memory=memory,
+        handle_parsing_errors=True,
     )
     return agent_executor
